@@ -1,0 +1,23 @@
+include "defs.mbr";
+
+
+PVS: wght = new WeightedCsp("wght") {
+  soft-constraint sc_lost_ratio_sales_ret: 'low_ratio_harsh(lost_ratio_sales_ret, lost_ratio_sales_ret_th)' :: weights('lost_ratio_sales_ret_w');
+  soft-constraint sc_lost_ratio_sales_dis: 'low_ratio_harsh(lost_ratio_sales_dis, lost_ratio_sales_dis_th)' :: weights('lost_ratio_sales_dis_w');
+  soft-constraint sc_lost_ratio_sales_fac: 'low_ratio_harsh(lost_ratio_sales_fac, lost_ratio_sales_fac_th)' :: weights('lost_ratio_sales_fac_w');
+  soft-constraint sc_stock_customer_MA_mean_relative: 'high_ratio_harsh(stock_customer_MA_mean_relative, stock_customer_MA_mean_relative_th)' :: weights('stock_customer_MA_mean_relative_w');
+  soft-constraint sc_stock_distributor_MA_mean_relative: 'high_ratio_harsh(stock_distributor_MA_mean_relative, stock_distributor_MA_mean_relative_th)' :: weights('stock_distributor_MA_mean_relative_w');
+  soft-constraint sc_stock_retailer_MA_mean_relative: 'high_ratio_harsh(stock_retailer_MA_mean_relative, stock_retailer_MA_mean_relative_th)' :: weights('stock_retailer_MA_mean_relative_w');
+  soft-constraint sc_stock_factory_MA_mean_relative: 'low_ratio_harsh(stock_factory_MA_mean_relative, stock_factory_MA_mean_relative_th)' :: weights('stock_factory_MA_mean_relative_w');
+};
+
+
+solve wght;
+
+output '
+["\(Fact[1]), \(Distr1[1]), \(Distr2[1])"] ++
+[", \(v1_DailyPurchase[1]), \(v2_PeriodicallyPurchase[1]), \(v3_Random[1])"] ++
+[", \(v1_s_Q[1]), \(v2_s_S[1]), \(v3_R_S[1]), \(v4_Random[1])"] ++
+[", \(lost_ratio_sales_ret[1]), \(lost_ratio_sales_dis[1]), \(lost_ratio_sales_fac[1])"] ++
+[", \(stock_customer_MA_mean_relative[1]), \(stock_distributor_MA_mean_relative[1]), \(stock_retailer_MA_mean_relative[1]), \(stock_factory_MA_mean_relative[1])"]
+';

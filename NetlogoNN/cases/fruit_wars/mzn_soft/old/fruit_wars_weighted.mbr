@@ -1,0 +1,17 @@
+include "defs.mbr";
+
+PVS: weighted = new WeightedCsp("weighted") {
+  soft-constraint more_reactive_aggression: 'forall(t in Time) (mean_reactive_aggression[t] >= mean_proactive_aggression[t])' :: weights('1');
+%   soft-constraint more_starvation_than_murder: 'forall(t in Time) (starvation_rate[t] >= murder_rate[t])' :: weights('1');
+%   soft-constraint more_age_death_than_murder: 'forall(t in Time) (age_death_rate[t] >= murder_rate[t])' :: weights('1');
+  soft-constraint more_int_than_strength: 'forall(t in Time) (mean_intelligence[t] >= mean_strength[t])' :: weights('1');
+  soft-constraint not_very_high_collab: 'forall(t in Time) (collaboration_bonus[t] <= 3)' :: weights('1');
+%   soft-constraint not_very_low_max_age: 'forall(t in Time) (max_age[t] >= 200)' :: weights('2');
+};
+
+solve weighted;
+
+
+
+
+output '["Collab Bonus: "] ++ ["\(collaboration_bonus[t])," | t in Time ]';

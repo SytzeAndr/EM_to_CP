@@ -1,0 +1,26 @@
+%%% static parameters %%%
+timespan = 1;
+initial_fruit_bushes = [40];
+initial_foragers = [40];
+ticks_to_flee = [100];
+bush_growth_chance = [10];
+rate_of_mutation = [5.0];
+%%% dynamic parameters %%%
+mean_strength_th = 0.6869204022883068;
+mean_strength_w = 93;
+mean_speed_th = 0.8573595322730654;
+mean_speed_w = 9;
+mean_intelligence_th = 0.0877247920462515;
+mean_intelligence_w = 67;
+murder_rate_th = 0.40935180905648183;
+murder_rate_w = 90;
+age_death_rate_th = 0.13308178967698847;
+age_death_rate_w = 14;
+starvation_rate_th = 0.6997502401889355;
+starvation_rate_w = 35;
+mean_reactive_aggression_th = 0.475065084231328;
+mean_reactive_aggression_w = 42;
+mean_proactive_aggression_th = 0.9634872976663231;
+mean_proactive_aggression_w = 10;
+average_population_th = 361;
+average_population_w = 216;

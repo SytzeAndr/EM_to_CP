@@ -1,0 +1,2 @@
+Fact,Distr1,Distr2,v1_DailyPurchase,v2_PeriodicallyPurchase,v3_Random,v1_s_Q,v2_s_S,v3_R_S,v4_Random,lost_ratio_sales_ret,lost_ratio_sales_dis,lost_ratio_sales_fac,stock_customer_MA_mean_relative,stock_distributor_MA_mean_relative,stock_retailer_MA_mean_relative,stock_factory_MA_mean_relative
+1, 1, 1, 0, 0, 1, 0, 0, 0, 1, 6.725763314465879e-09, 0.01387364695513251, 8.420120178006463e-08, 0.001969344986820015, 0.1272637357768029, 0.02746424483303458, 0.7365537263509666

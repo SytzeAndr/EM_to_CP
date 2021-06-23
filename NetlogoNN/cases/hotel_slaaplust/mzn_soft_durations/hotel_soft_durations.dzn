@@ -1,0 +1,46 @@
+% we consider 12 months, each month is called a timeblock
+timespan = 1;
+
+t1_dur_raw = [10];
+t2_dur_raw = [10];
+t3_dur_raw = [10];
+t4_dur_raw = [10];
+t5_dur_raw = [10];
+t6_dur_raw = [10];
+
+t1_max_relative_change = 0.5;
+t2_max_relative_change = 0.5;
+t3_max_relative_change = 0.5;
+
+t1_w = 0.1;
+t2_w = 0.03;
+t3_w = 0.03;
+
+% simulation in parameters
+p_incoming_t1 = [0.6];
+p_incoming_t3 = [0.3];
+p_showup = [0.9];
+spread_factor = [0.8];
+receptionists_amount = [100];
+
+satisfied_max_quetime = [5];
+checkin_max_quetime = [10];
+reservation_max_quetime = [10];
+noshow_max_time = [1000];
+
+time_between_t1_and_t3 = [100];
+stay_duration = [100];
+spread_horizon = [2000];
+
+% soft constraint parameters
+low_t1_loss_th = 0.1;
+low_t1_loss_w = 3;
+
+low_t2_loss_th = 0.1;
+low_t2_loss_w = 1;
+
+low_t3_loss_th = 0.1;
+low_t3_loss_w = 3;
+
+low_unsatisfied_th = 0.2;
+low_unsatisfied_w = 10;

@@ -1,0 +1,23 @@
+include "defs.mbr";
+
+%   soft-constraint max_value_end: 'maximize P_value[P_objective, TimeMax]';
+
+PVS: cp1 = new ConstraintPreferences("cp1") {
+  % preference for no executions after first encounter of an empty execution set
+  soft-constraint c0: 'forall(ti in 1..TimeMax-1 where T_executed[ti] = {})
+     (T_executed[ti+1] = {})';  
+  % threshold for our objectives
+  soft-constraint c1: 'P_value[P_objective_1, TimeMax] >= P_objective_1_min';
+  soft-constraint c2: 'P_value[P_objective_2, TimeMax] >= P_objective_2_min';
+
+  crEdges : '[|mbr.c1, mbr.c0 | mbr.c2, mbr.c0|]';
+  useSPD: 'true' ; % <- ????
+};
+
+
+output
+  '["executed transactions:\n"] ++ ["\(ti): \(T_executed[ti])\n" | ti in Time] ++ ["\n"] ++
+  ["t:\t"] ++ ["\(t)\t" | t in Time] ++
+  [if t=1 then "\n\(p):\t" else "" endif ++ "\(P_value[p, t])\t" | p in P, t in Time]';
+
+solve ToWeighted(cp1);

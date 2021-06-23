@@ -1,0 +1,109 @@
+% The kitchen of a pizza restaurant modelled as a supply chain
+% We have machines, resources, inventories, processes and orders.
+% If the deadline of the order is not met, the client gets angry and will walk away, thus no profit
+
+timespan = 10;
+
+Resource = {
+  Hawaii, 
+  HawaiiUnbaked, 
+  Margharita, 
+  MargharitaUnbaked, 
+  Tomato, 
+  TomatoChopped, 
+  Cheese, 
+  Pineapple, 
+  PineappleChopped, 
+  Flour, 
+  Dough
+};
+
+% for each resource where it should be stored
+ResourceInventory = [
+  Out, 
+  MiddleDesk, 
+  Out, 
+  MiddleDesk, 
+  Storage, 
+  MiddleDesk, 
+  Storage, 
+  Storage, 
+  MiddleDesk, 
+  Storage, 
+  MiddleDesk
+];
+
+% inventory and capacity. Each resource hold up one slot
+Inventory = {Out, MiddleDesk, Storage};
+InventoryOut = Out;
+InventoryCapacity = [10, 20, 100];
+
+Machine = {Oven, ChopDesk, DoughDesk, PizzaPrepareDesk};
+
+Process = {
+  OvenHawaii, 
+  OvenMargharita, 
+  PrepareHawaii, 
+  PrepareMargharita, 
+  ChopTomato, 
+  ChopPineapple, 
+  MakeDough
+};
+
+% what resources are necessary and what comes out
+ProcessResourceIn = [
+  {HawaiiUnbaked}, 
+  {MargharitaUnbaked}, 
+  {Dough, TomatoChopped, Cheese, PineappleChopped}, 
+  {Dough, TomatoChopped, Cheese},
+  {Tomato},
+  {Pineapple},
+  {Flour}
+];
+
+ProcessResourceOut = [
+  {Hawaii}, 
+  {Margharita}, 
+  {HawaiiUnbaked}, 
+  {MargharitaUnbaked},
+  {TomatoChopped},
+  {PineappleChopped},
+  {Dough}
+];
+
+% what machine is necessary for each process
+ProcessMachine = [
+  Oven, 
+  Oven, 
+  PizzaPrepareDesk, 
+  PizzaPrepareDesk, 
+  ChopDesk, 
+  ChopDesk, 
+  DoughDesk
+];
+
+% how long each process takes
+ProcessDuration = [
+  7,
+  7,
+  2,
+  2,
+  2,
+  2,
+  2
+];
+
+% inventory levels for each resource at t=0
+% {Hawaii, HawaiiUnbaked, Margharita, MargharitaUnbaked, Tomato, TomatoChopped, Cheese, Pineapple, PineappleChopped, Flour, Dough}
+InventoryInit = 
+ [| 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  | 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+  | 0, 0, 0, 0, 20, 0, 20, 15, 0, 20, 0|];
+
+Order = anon_enum(4);
+
+OrderContent = [Hawaii, Hawaii, Margharita, Hawaii];
+OrderQuantity = [1, 1, 2, 2];
+OrderDeadline = [22, 22, 35, 39];
+% hawaii costs 12 and margharita 10
+OrderProfit = [12, 12, 20, 24];

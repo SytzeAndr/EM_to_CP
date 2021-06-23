@@ -1,0 +1,18 @@
+include "defs.mbr";
+
+% we can set certaint goals based on thresholds to get a more multi-objective kind of solution
+% decomposition of goals
+PVS: improve_research_ranking = new WeightedCsp("improve_research_ranking") {
+  soft-constraint papers_submitted: 'papers_submitted >= papers_submitted_th' :: weights('papers_submitted_w');
+  soft-constraint papers_acceptance_ratio: 'papers_acceptance_ratio >= papers_acceptance_ratio_th' :: weights('papers_acceptance_ratio_w');
+};
+
+PVS: improve_teaching_ranking = new WeightedCsp("improve_teaching_ranking") {  
+  soft-constraint class_not_taken_ratio: 'class_not_taken_ratio >= class_not_taken_ratio_th' :: weights('class_not_taken_ratio_w');
+  soft-constraint class_adequate_preparation_ratio: 'class_adequate_preparation_ratio <= class_adequate_preparation_ratio_th' :: weights('class_adequate_preparation_ratio_w');
+  soft-constraint complaints_per_module: 'complaints_per_module >= complaints_per_module_th' :: weights('complaints_per_module_w');
+  soft-constraint queries_per_module: 'queries_per_module >= queries_per_module_th' :: weights('queries_per_module_w');
+};
+
+% condorcet voting among our two main objectives to improve overall ranking
+solve vote([improve_research_ranking, improve_teaching_ranking], condorcet);

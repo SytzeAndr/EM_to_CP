@@ -1,0 +1,15 @@
+{
+    "openFiles": [
+        "abc_university.mzn",
+        "abc_university.mbr"
+    ],
+    "openTab": 0,
+    "projectFiles": [
+        "abc_university.mbr",
+        "abc_university.mbr.mzn",
+        "abc_university.mzn"
+    ],
+    "selectedBuiltinConfigId": "org.gecode.gecode",
+    "selectedBuiltinConfigVersion": "6.3.0",
+    "version": 106
+}

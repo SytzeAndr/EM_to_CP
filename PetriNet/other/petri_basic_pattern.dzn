@@ -1,0 +1,31 @@
+% petri net derived from the simple FHCC case, which corresponds with the basic transaction pattern found in DEMO
+% the steps are: request (rq), promise (pm), execute (e), state (st), accept (ac)
+% two actors, A01 and A02
+
+% P ~ places
+P = {A01_in, T01_O, A02_in, A02_out, T01_R, A01_out};
+
+% T ~ transitions
+T = {T01_rq, T01_pm, T01_E, T01_st, T01_ac};
+
+% F ~ arcs n (flow relations)
+% F_to ~ flow is going TO a transaction
+F_to = {A01_in__T01_rq, T01_O__T01_pm, A02_in__T01_E, A02_out__T01_st, T01_R__T01_ac};
+
+F_to_in = [A01_in, T01_O, A02_in, A02_out, T01_R];
+F_to_out = [T01_rq, T01_pm, T01_E, T01_st, T01_ac];
+
+% F_from ~ flow is coming FROM a transaction
+F_from = {T01_rq__T01_O, T01_pm__A02_in, T01_E__A02_out, T01_st__T01_R, T01_ac__A01_out};
+F_from_in = [T01_rq, T01_pm, T01_E, T01_st, T01_ac];
+F_from_out = [T01_O, A02_in, A02_out, T01_R, A01_out];
+
+% initial configuration
+F_to_value = [1, 1, 1, 1, 1];
+F_from_value = [1, 1, 1, 1, 1];
+P_init = [1, 0, 0, 0, 0, 0];
+
+% Time horizon
+TimeMax = 11;
+
+P_objective = A01_out;

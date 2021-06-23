@@ -1,0 +1,21 @@
+{
+    "openFiles": [
+        "hotel_soft_durations.mzn",
+        "hotel_soft_durations.mbr",
+        "hotel_soft_durations.dzn",
+        "nn_ratio_1layer.mzn"
+    ],
+    "openTab": 1,
+    "projectFiles": [
+        "hotel_dzn_210429-111938/hotel_0.dzn",
+        "hotel_dzn_210429-111938/hotel_1.dzn",
+        "hotel_soft.mzn",
+        "hotel_soft_durations.dzn",
+        "hotel_soft_durations.mbr",
+        "hotel_soft_durations.mzn",
+        "nn_ratio_1layer.mzn"
+    ],
+    "selectedBuiltinConfigId": "org.jacop",
+    "selectedBuiltinConfigVersion": "4.8",
+    "version": 106
+}

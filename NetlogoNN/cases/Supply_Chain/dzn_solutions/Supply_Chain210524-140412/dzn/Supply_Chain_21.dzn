@@ -1,0 +1,28 @@
+%%% static parameters %%%
+timespan = 1;
+Fact = [2];
+Distr1 = [5];
+Distr2 = [10];
+Clients_N = [100];
+Demand_W = [15];
+Lt0 = [4];
+Lt1 = [4];
+SS_ = [0.85];
+DS_D = [8];
+K = [200];
+MA = [500];
+%%% dynamic parameters %%%
+lost_ratio_sales_ret_th = 0.8569996869681168;
+lost_ratio_sales_ret_w = 39;
+lost_ratio_sales_dis_th = 0.20040578826015276;
+lost_ratio_sales_dis_w = 52;
+lost_ratio_sales_fac_th = 0.5042580671634638;
+lost_ratio_sales_fac_w = 84;
+stock_customer_MA_mean_relative_th = 0.5502260711172646;
+stock_customer_MA_mean_relative_w = 34;
+stock_distributor_MA_mean_relative_th = 0.4095313219144532;
+stock_distributor_MA_mean_relative_w = 11;
+stock_retailer_MA_mean_relative_th = 0.05111074634093338;
+stock_retailer_MA_mean_relative_w = 92;
+stock_factory_MA_mean_relative_th = 0.8546883769121784;
+stock_factory_MA_mean_relative_w = 11;

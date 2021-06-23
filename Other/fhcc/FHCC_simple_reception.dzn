@@ -1,0 +1,18 @@
+% A patient wants to make an appointment with the nurse.
+
+Belief = {appointmentRequest, appointment};
+Agent = {patient, nurse};
+
+% inventory at t=1
+KnowledgeInit = [{appointmentRequest}, {}];
+
+% define processes
+Task = {request_appointment, create_appointment, confirm_appointment};
+
+TaskAnnouncer = [patient, nurse, nurse];
+TaskRecipient = [nurse, nurse, patient];
+
+TaskInput = [{appointmentRequest}, {appointmentRequest}, {appointment}];
+TaskOutput = [{appointmentRequest}, {appointment}, {appointment}];
+
+TimeMax = 5;

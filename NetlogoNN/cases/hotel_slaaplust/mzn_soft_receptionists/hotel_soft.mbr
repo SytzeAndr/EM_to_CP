@@ -1,0 +1,36 @@
+include "defs.mbr";
+
+PVS: cp1 = new ConstraintPreferences("cp1") {
+  soft-constraint unsat: 'unsatisfied_rate[1] <= 0.9';
+  soft-constraint t1loss: 't1_loss[1] <= 0.2';
+  soft-constraint t2loss: 't2_loss[1] <= 0.2';
+  soft-constraint t3loss: 't3_loss[1] <= 0.2';
+
+  crEdges : '[|mbr.t1loss, mbr.unsat |]';
+  useSPD: 'false' ; % <- ????
+};
+
+% type CostFunctionNetwork = PVSType<0..k> = 
+%   params {
+%     int: k :: default('1000'); 
+%   } in  
+%   instantiates with "soft_constraints/mbr_types/cfn_type.mzn" {
+%     times -> sum;
+%     is_worse -> is_worse_weighted; 
+%     top -> 0;
+%  };
+
+% PVS: cost = new CostFunctionNetwork("cost") {
+%   soft-constraint profit_0: 'profit_rounded';
+% %   soft-constraint profit_0: 'receptionists_amount[1] <= 10';
+% %   soft-constraint profit_0: 'receptionists_amount[1] <= 10';
+% };
+
+output '["profit (rounded): \(profit_rounded)"] ++
+  ["\nreceptionists: \(receptionists_amount)"] ++ ["\n"] ++
+  [if t=1 then "\nt1_loss_x\n" else "" endif ++ "\(t): \(t1_loss[t])\n" | t in Time] ++
+  [if t=1 then "\nt2_loss_x\n" else "" endif ++ "\(t): \(t2_loss[t])\n" | t in Time] ++
+  [if t=1 then "\nt3_loss_x\n" else "" endif ++ "\(t): \(t3_loss[t])\n" | t in Time] ++
+  [if t=1 then "\nunsatisfied_rate\n" else "" endif ++ "\(t): \(unsatisfied_rate[t])\n" | t in Time]';
+
+solve cp1;

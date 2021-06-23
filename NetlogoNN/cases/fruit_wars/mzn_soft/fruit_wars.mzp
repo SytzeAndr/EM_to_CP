@@ -1,0 +1,16 @@
+{
+    "openFiles": [
+        "fruit_wars.mzn",
+        "fruit_wars.dzn",
+        "fruit_wars.mbr"
+    ],
+    "openTab": 2,
+    "projectFiles": [
+        "fruit_wars.dzn",
+        "fruit_wars.mbr",
+        "fruit_wars.mzn"
+    ],
+    "selectedBuiltinConfigId": "org.jacop",
+    "selectedBuiltinConfigVersion": "4.8",
+    "version": 106
+}

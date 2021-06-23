@@ -1,0 +1,41 @@
+% simple timed petri net
+% example taken from https://en.wikipedia.org/wiki/Petri_net
+
+% P ~ places
+P = {p1, p2, p3};
+
+% T ~ transitions
+T = {t1};
+T_duration = [3];
+
+% F ~ arcs n (flow relations)
+% F_to ~ flow is going TO a transaction
+F_to = {f1, f2};
+F_to_in = [p1, p2];
+F_to_out = [t1, t1];
+
+% F_from ~ flow is coming FROM a transaction
+F_from = {f3};
+F_from_in = [t1];
+F_from_out = [p3];
+
+% initial configuration
+F_to_value = [2, 1];
+F_from_value = [2];
+
+% timed petri net considers tokens to be generated at timestamps
+% place of token
+init = {p1t0, p2t20};
+init_P = [p1, p2];
+% time token is generated
+init_T = [1, 2];
+% quantity of tokens generated
+init_V = [2, 1];
+
+% Time horizon
+TimeMax = 10;
+
+% objectives to set, we want to have these values at TimeMax
+Objectives = {cp3};
+P_objective_name = [p3];
+P_objective_value = [2];

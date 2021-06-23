@@ -1,0 +1,40 @@
+include "defs.mbr";
+
+% PVS: cp1 = new ConstraintPreferences("cp1") {
+% %   soft-constraint positive_profit: 'profit >= 0.0';
+%   soft-constraint low_t1_loss: 'low_ratio_harsh(t1_loss, 0.1)';
+%   soft-constraint low_t2_loss: 'low_ratio_harsh(t2_loss, 0.1)';
+%   soft-constraint low_t3_loss: 'low_ratio_harsh(t3_loss, 0.1)';
+%   soft-constraint low_unsatisfied: 'low_ratio_harsh(unsatisfied_rate, 0.1)';
+
+%   crEdges : '[|mbr.low_t2_loss, mbr.low_t1_loss | mbr.low_t3_loss, mbr.low_t1_loss |]';
+%   useSPD: 'false' ; % <- ????
+% };
+
+PVS: wght = new WeightedCsp("wght") {
+  soft-constraint low_t1_loss: 'low_ratio_harsh(t1_loss, low_t1_loss_th)' :: weights('low_t1_loss_w');
+  soft-constraint low_t2_loss: 'low_ratio_harsh(t2_loss, low_t2_loss_th)' :: weights('low_t2_loss_w');
+  soft-constraint low_t3_loss: 'low_ratio_harsh(t3_loss, low_t3_loss_th)' :: weights('low_t3_loss_w');
+  soft-constraint low_unsatisfied: 'low_ratio_harsh(unsatisfied_rate, low_unsatisfied_th)' :: weights('low_unsatisfied_w');
+};
+
+
+% output '
+%   [if t=1 then "\nt1_loss_x\n" else "" endif ++ "\(t): \(t1_loss[t])\n" | t in Time] ++
+%   [if t=1 then "\nt2_loss_x\n" else "" endif ++ "\(t): \(t2_loss[t])\n" | t in Time] ++
+%   [if t=1 then "\nt3_loss_x\n" else "" endif ++ "\(t): \(t3_loss[t])\n" | t in Time] ++
+%   [if t=1 then "\nunsatisfied_rate\n" else "" endif ++ "\(t): \(unsatisfied_rate[t])\n" | t in Time] ++
+%   [if t=1 then "\nt1_duration\n" else "" endif ++ "\(t): \(t1_duration[t])\n" | t in Time] ++
+%   [if t=1 then "\nt6_duration\n" else "" endif ++ "\(t): \(t6_duration[t])\n" | t in Time] ++
+%   [if t=1 then "\nt3_duration\n" else "" endif ++ "\(t): \(t3_duration[t])\n" | t in Time]
+% %   [if t=1 then "\nt4_duration\n" else "" endif ++ "\(t): \(t4_duration[t])\n" | t in Time] ++
+% %   [if t=1 then "\nt5_duration\n" else "" endif ++ "\(t): \(t5_duration[t])\n" | t in Time] ++
+% %   [if t=1 then "\nt6_duration\n" else "" endif ++ "\(t): \(t6_duration[t])\n" | t in Time]
+%   ';
+
+output '
+  ["\(low_t1_loss_th), \(low_t1_loss_w), \(low_t2_loss_th), \(low_t2_loss_w), \(low_t3_loss_th), \(low_t3_loss_w), \(low_unsatisfied_th), \(low_unsatisfied_w)"] ++ [", \(t1_change_a), \(t2_change_a), \(t3_change_a)"] ++ [", \(t1_loss[1]), \(t2_loss[1]), \(t3_loss[1]), \(unsatisfied_rate[1])"]
+';
+
+% solve ToWeighted(cp1);
+solve wght;

@@ -1,0 +1,15 @@
+P = {p7, p6, p18, p16, p19, p5, p4, p20, p1, p13, p21, p22, p2, p10, p3, p8, p9, p11, p14, p0, p12, p15, p17};
+T = {t7, t2, t13, t14, t3, t8, t1, t5, t10, t0, t4, t6, t9, t11, t12};
+F_to = {p1t2, p12t14, p6t14, p11t13, p18t14, p10t12, p2t3, p5t6, p9t14, p17t13, p2t11, p8t14, p14t13, p7t14, p2t9, p4t10, p1t7, p16t13, p5t8, p0t0, p4t1, p4t5, p13t14, p15t12, p3t4};
+F_to_in = [p1, p12, p6, p11, p18, p10, p2, p5, p9, p17, p2, p8, p14, p7, p2, p4, p1, p16, p5, p0, p4, p4, p13, p15, p3];
+F_to_out = [t2, t14, t14, t13, t14, t12, t3, t6, t14, t13, t11, t14, t13, t14, t9, t10, t7, t13, t8, t0, t1, t5, t14, t12, t4];
+F_from = {t6p15, t0p4, t10p7, t0p5, t1p13, t3p14, t2p11, t8p6, t7p16, t14p20, t0p2, t12p21, t0p3, t9p18, t3p17, t14p22, t13p19, t0p1, t5p8, t8p12, t4p10, t11p9};
+F_from_in = [t6, t0, t10, t0, t1, t3, t2, t8, t7, t14, t0, t12, t0, t9, t3, t14, t13, t0, t5, t8, t4, t11];
+F_from_out = [p15, p4, p7, p5, p13, p14, p11, p6, p16, p20, p2, p21, p3, p18, p17, p22, p19, p1, p8, p12, p10, p9];
+F_to_value = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+F_from_value = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+P_init = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0];
+TimeMax = 9;
+Objectives = {cp19, cp20, cp21, cp22};
+P_objective_name = [p19, p20, p21, p22];
+P_objective_value = [1, 1, 1, 1];

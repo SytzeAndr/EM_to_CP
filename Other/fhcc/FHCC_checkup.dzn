@@ -1,0 +1,46 @@
+
+Belief = {appointmentRequest, appointment, checkup_request, completed_examination};
+Agent = {patient, receptionist, physician, nurse};
+
+% inventory at t=1
+KnowledgeInit = [{appointmentRequest}, {}, {}, {}];
+
+% define processes
+Task = {
+  % T1: appointment scheduling
+  request_appointment, create_appointment, confirm_appointment,
+  % T2: patient examination
+  attend_appointment, examine_patient, confirm_examination,
+  % T3: General checkup
+  request_checkup, perform_checkup, confirm_checkup
+};
+
+TaskAnnouncer = 
+[
+  patient, receptionist, receptionist,
+  patient, physician, physician,
+  physician, nurse, nurse
+];
+
+TaskRecipient = 
+[
+  receptionist, receptionist, patient,
+  physician, physician, patient,
+  nurse, nurse, physician
+];
+
+TaskInput = 
+[
+  {appointmentRequest}, {appointmentRequest}, {appointment},
+  {appointment}, {appointment}, {completed_examination},
+  {checkup_request}, {checkup_request}, {completed_examination}
+];
+
+TaskOutput = 
+[
+  {appointmentRequest}, {appointment}, {appointment},
+  {appointment}, {checkup_request}, {completed_examination},
+  {checkup_request}, {completed_examination}, {completed_examination}  
+];
+
+TimeMax = 11;

@@ -1,0 +1,30 @@
+% simple petri net,
+% example taken from https://en.wikipedia.org/wiki/Petri_net
+
+% P ~ places
+P = {p1, p2, p3};
+
+% T ~ transitions
+T = {t1};
+
+% F ~ arcs n (flow relations)
+% F_to ~ flow is going TO a transaction
+F_to = {f1, f2};
+F_to_in = [p1, p3];
+F_to_out = [t1, t1];
+
+% F_from ~ flow is coming FROM a transaction
+F_from = {f3};
+F_from_in = [t1];
+F_from_out = [p2];
+
+% initial configuration
+F_to_value = [2, 1];
+F_from_value = [2];
+P_init = [2, 0, 1];
+
+% Time horizon
+TimeMax = 3;
+
+% Define sink: what do we want to maximize?
+P_objective = p3;

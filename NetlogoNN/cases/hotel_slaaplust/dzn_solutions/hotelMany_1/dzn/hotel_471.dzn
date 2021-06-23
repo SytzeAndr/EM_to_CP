@@ -1,0 +1,33 @@
+%%% static parameters %%%
+timespan = 1;
+t1_dur_raw = [10];
+t2_dur_raw = [10];
+t3_dur_raw = [10];
+t4_dur_raw = [10];
+t5_dur_raw = [10];
+t6_dur_raw = [10];
+t1_max_relative_change = 0.4;
+t2_max_relative_change = 0.4;
+t1_w = 0.1;
+t2_w = 0.03;
+p_incoming_t1 = [0.5];
+p_incoming_t3 = [0.2];
+p_showup = [0.8];
+spread_factor = [0.8];
+receptionists_amount = [80];
+satisfied_max_quetime = [5];
+checkin_max_quetime = [10];
+reservation_max_quetime = [10];
+noshow_max_time = [1000];
+time_between_t1_and_t3 = [100];
+stay_duration = [100];
+spread_horizon = [2000];
+%%% dynamic parameters %%%
+low_t1_loss_th = 0.37325757468961895;
+low_t1_loss_w = 10;
+low_t2_loss_th = 0.4128943325102707;
+low_t2_loss_w = 9;
+low_t3_loss_th = 0.31302118933104156;
+low_t3_loss_w = 6;
+low_unsatisfied_th = 0.23813855623850738;
+low_unsatisfied_w = 4;
