@@ -1,0 +1,11 @@
+buy1,buy2,spoil_ratio,succes_ratio
+5, 5, 0.5756182539154818, succes_ratio[1])
+1, 6, 0.8989520872843698, succes_ratio[1])
+2, 7, 0.915441136681825, succes_ratio[1])
+1, 1, 0.3996334932294103, succes_ratio[1])
+5, 7, 0.6394534033925896, succes_ratio[1])
+5, 5, 0.5756182539154818, succes_ratio[1])
+3, 3, 0.4800610529324268, succes_ratio[1])
+4, 5, 0.5453010982239179, succes_ratio[1])
+1, 1, 0.3996334932294103, succes_ratio[1])
+5, 6, 0.5924269441371114, succes_ratio[1])

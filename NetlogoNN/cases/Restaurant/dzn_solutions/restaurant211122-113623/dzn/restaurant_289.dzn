@@ -1,0 +1,6 @@
+%%% static parameters %%%
+%%% dynamic parameters %%%
+spoil_ratio_th = 0.12850788205887997;
+succes_ratio_th = 0.24763298225890285;
+spoil_ratio_w = 7;
+succes_ratio_w = 79;

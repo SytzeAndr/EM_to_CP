@@ -1,0 +1,6 @@
+%%% static parameters %%%
+%%% dynamic parameters %%%
+buy1_th = 0.7440092937706835;
+buy2_th = 0.5389194621493416;
+buy1_w = 86;
+buy2_w = 88;

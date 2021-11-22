@@ -1,0 +1,15 @@
+include "defs.mbr";
+
+
+PVS: wght = new WeightedCsp("wght") {
+  soft-constraint low_spoil: 'low_ratio_harsh(spoil_ratio, spoil_ratio_th)' :: weights('spoil_ratio_w');
+  soft-constraint high_succes: 'high_ratio_harsh(succes_ratio, succes_ratio_th)' :: weights('succes_ratio_w');
+};
+
+
+solve wght;
+
+output '
+["\(buy1[1]), \(buy2[1]), "] ++
+["\(spoil_ratio[1]), \(succes_ratio[1])"]
+';
