@@ -5,7 +5,7 @@ import sklearn.preprocessing
 
 sys.path.append("../..")
 
-from NetLogoSimulator import NetLogoSimulator
+from NetLogoSimulatorUniform import NetLogoSimulatorUniform
 from NetLogoDataFitterNN import NetLogoDataFitterNN, DatasetCSV
 from LinearNet import LinearNet, LinearNetTanh, LinearNetSoftmax, LinearNetRelu, LinearNetSigmoid
 import torch
@@ -13,7 +13,7 @@ import numpy as np
 import pandas as pd
 
 
-class SupplyChainSimulator(NetLogoSimulator):
+class SupplyChainSimulator(NetLogoSimulatorUniform):
     # custom sampling for the supply chain
 
     def sampleParameterCombination(self):

@@ -1,0 +1,5 @@
+{
+  "netlogo_home": "<insert full path to netlogo>",
+  "netlogo_version": "<f.e. '6.2'>",
+  "jvm_home": "<insert full path to libjvm.so. f.e. '/usr/lib/jvm/java-1.11.0-openjdk-amd64/lib/server/libjvm.so'>"
+}
