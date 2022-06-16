@@ -17,7 +17,7 @@ sys.path.append(
     )
 )
 
-from EM_to_CP.NetlogoNN import ParameterSamplerSobol, NetLogoSimulator
+from EM_to_CP.NetlogoNN import ParameterSamplerSobol, ParameterSamplerHalton, ParameterSamplerUniform, NetLogoSimulator
 
 
 class NetlogoSimulatorSupplyChain(NetLogoSimulator):
@@ -38,7 +38,7 @@ class NetlogoSimulatorSupplyChain(NetLogoSimulator):
             "Fact": [1, 3],
             "Distr1": [1, 10],  # need scaling
             "Distr2": [1, 40],  # need scaling
-            "Clients_N": [1, 2000],  # need scaling
+            "Clients_N": [1, 1500],  # need scaling
             "Demand_W": [1, 15],
             "HC": [0.01, 0.1],
             "Lt0": [4],  # [0, 7], # fix?
@@ -63,21 +63,22 @@ class NetlogoSimulatorSupplyChain(NetLogoSimulator):
         )
 
 
-def run_qmd_sobol(amount, log_folder=None):
-    parameter_sampler_constructor = ParameterSamplerSobol
+def run(amount, sampler, log_folder=None):
     netlogo_simulator = NetlogoSimulatorSupplyChain(
-        parameter_sampler_constructor=parameter_sampler_constructor,
+        parameter_sampler_constructor=sampler,
         tag="supply_chain_sobol"
     )
     netlogo_simulator.run(
         randomParametersCount=amount,
         simulationTicks=3000,
         log_folder=log_folder,
-        timeoutRestartTime=300,
-        num_workers=4
+        timeoutRestartTime=600,
+        num_workers=None
     )
 
 
 if __name__=="__main__":
     # run_qmd_sobol(10)
-    run_qmd_sobol(100, "data_out/supply_chain_sobol_v2")
+    run(1000, ParameterSamplerHalton, log_folder="data_out/supply_chain_halton_v3")
+    run(1000, ParameterSamplerUniform, log_folder="data_out/supply_chain_uniform_v3")
+    run(1000, ParameterSamplerSobol, log_folder="data_out/supply_chain_sobol_v3")

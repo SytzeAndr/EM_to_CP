@@ -38,7 +38,7 @@ if __name__ == "__main__":
             tag="fruit_wars_"
         )
 
-    s.run(randomParametersCount=100000, simulationTicks=6000, cores=9)
+    s.run(randomParametersCount=100000, simulationTicks=6000, num_workers=9)
     folder = s.logFolder
     print(folder)
     testData = "data_out/fruit_wars_210408-124609/data_out.csv"

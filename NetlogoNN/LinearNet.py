@@ -7,7 +7,9 @@ p_dropout_def = 0.1
 
 
 class LinearNet(nn.Module):
-    def __init__(self, n_in, n_out, hiddenLayers, hiddenLayerSize=None, p_dropout=p_dropout_def, tanh=False, softmax=False, relu=False, sigmoid=False):
+    def __init__(self, n_in, n_out, hiddenLayers, hiddenLayerSize=None, p_dropout=p_dropout_def,
+                 tanh=False, softmax=False, relu=False, sigmoid=False, taylor_simple=False, pow2_activation=False,
+                 double_relu=False):
         super(LinearNet, self).__init__()
 
         self.hiddenLayers = hiddenLayers
@@ -21,6 +23,9 @@ class LinearNet(nn.Module):
         self.softmax = softmax
         self.relu = relu
         self.sigmoid = sigmoid
+        self.taylor_simple = taylor_simple
+        self.pow2_activation = pow2_activation
+        self.double_relu = double_relu
 
         layerList = []
         for i in range(hiddenLayers):
@@ -49,6 +54,13 @@ class LinearNet(nn.Module):
             x = torch.relu(x)
         if self.sigmoid:
             x = torch.sigmoid(x)
+        if self.taylor_simple:
+            x = torch.div(1 ,torch.add(1, torch.relu(x)))
+        if self.pow2_activation:
+            x = torch.div(1, torch.add(1, torch.pow(x, 2)))
+        if self.double_relu:
+            # todo: implement in createMinizincFunctions
+            x = torch.clamp(x, 0, 1)
         return x
 
     def createMiniZincFunctions(self, paramsIn, paramsOut, fileout, tag=""):
@@ -143,7 +155,7 @@ class LinearNet(nn.Module):
             sumRep = ""
             for i, paramOut in enumerate(paramsOut):
                 # define sum
-                if i is not 0:
+                if i != 0:
                     sumRep += " + "
                 sumRep += "{paramOut}[t]".format(paramOut=paramOut)
 
@@ -160,6 +172,16 @@ class LinearNet(nn.Module):
                 # relu(x) = max(x,0)
                 stringOut += "constraint forall(t in Time) ({paramOut}[t] = max({lastNode}[t], 0));\n".format(
                     paramOut=paramOut, lastNode=nodeNames[i])
+
+        elif self.taylor_simple:
+            # simple 1 layered taylor approximation of 1 / (1 + exp(-x))
+            for i, paramOut in enumerate(paramsOut):
+                stringOut += f"constraint forall(t in Time) ({paramOut}[t] = 1 / (1 + max({nodeNames[i]}[t], 0)));\n"
+
+        elif self.pow2_activation:
+            # simple 1 activation that uses 1 / (1 + x^2)
+            for i, paramOut in enumerate(paramsOut):
+                stringOut += f"constraint forall(t in Time) ({paramOut}[t] = 1 / (1 + ({nodeNames[i]}[t] * {nodeNames[i]}[t]));\n"
 
         else:
             for i, paramOut in enumerate(paramsOut):
@@ -199,3 +221,24 @@ class LinearNetTanhRelu(LinearNet):
     # outputs between 0 and 1
     def __init__(self, n_in, n_out, hiddenLayers=3, hiddenLayerSize=None, p_dropout=p_dropout_def):
         super().__init__(n_in, n_out, hiddenLayers, hiddenLayerSize, p_dropout, tanh=True, relu=True)
+
+
+class LinearNetTaylorSimple(LinearNet):
+    # outputs between 0 and 1
+    # f(x) = 1 / (1 + max(0,x))
+    def __init__(self, n_in, n_out, hiddenLayers=3, hiddenLayerSize=None, p_dropout=p_dropout_def):
+        super().__init__(n_in, n_out, hiddenLayers, hiddenLayerSize, p_dropout, taylor_simple=True)
+
+
+class LinearNetPow2(LinearNet):
+    # outputs between 0 and 1
+    # f(x) = 1 / (1 + x^2)
+    def __init__(self, n_in, n_out, hiddenLayers=3, hiddenLayerSize=None, p_dropout=p_dropout_def):
+        super().__init__(n_in, n_out, hiddenLayers, hiddenLayerSize, p_dropout, pow2_activation=True)
+
+
+class LinearDoubleRelu(LinearNet):
+    # outputs between 0 and 1
+    # f(x) = min(1, max(x, 0))
+    def __init__(self, n_in, n_out, hiddenLayers=3, hiddenLayerSize=None, p_dropout=p_dropout_def):
+        super().__init__(n_in, n_out, hiddenLayers, hiddenLayerSize, p_dropout, double_relu=True)

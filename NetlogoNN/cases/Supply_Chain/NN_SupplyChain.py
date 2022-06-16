@@ -88,11 +88,11 @@ if __name__ == "__main__":
     ]
 
     parametersInRange = {
-            "Fact": [1, 5],
-            "Distr1": [1, 30], # need scaling
-            "Distr2": [1, 120], # need scaling
-            "Clients_N": [1, 6000], # need scaling
-            "Demand_W": [1, 30],
+            "Fact": [1, 3],
+            "Distr1": [1, 10], # need scaling
+            "Distr2": [1, 40], # need scaling
+            "Clients_N": [1, 1500], # need scaling
+            "Demand_W": [1, 15],
             "HC": [0.01, 0.1],
             "Lt0": [4], # [0, 7], # fix?
             "Lt1": [4], # [0, 7], # fix?
