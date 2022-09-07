@@ -25,8 +25,8 @@ def run_sim(buying_strategy, recipe_book, order_max_per_period, periods=10):
     inventory = [0 for _ in range(num_ingredients)]
 
     # metrics
-    unsuccesful = 0
-    succes = 0
+    unsuccessful = 0
+    success = 0
 
     bought = 0
     spoiled = 0
@@ -55,17 +55,16 @@ def run_sim(buying_strategy, recipe_book, order_max_per_period, periods=10):
                 if inventory[ingredient_index] < ingredient_value:
                     can_be_made = False
             if not can_be_made:
-                unsuccesful += 1
+                unsuccessful += 1
             else:
-                succes += 1
+                success += 1
                 # consume resources
                 for ingredient_index, ingredient_value in corresponding_recipe.items():
                     inventory[ingredient_index] -= ingredient_value
 
-
-    succes_rate = succes / (unsuccesful + succes) if unsuccesful + succes != 0 else 0.0
+    success_rate = success / (unsuccessful + success) if unsuccessful + success != 0 else 0.0
     spoil_rate = spoiled / (bought + spoiled + sum(inventory)) if bought + spoiled + sum(inventory) != 0 else 0.0
-    return succes_rate, spoil_rate
+    return success_rate, spoil_rate
 
 
 if __name__ == "__main__":
@@ -75,7 +74,7 @@ if __name__ == "__main__":
     # recipe_book = {0: {3: 2, 4: 3}, 1: {2: 1, 4: 1}, 2: {4: 2, 2: 3}, 3: {1: 3, 3: 3}, 4: {4: 3, 3: 3}}
 
     buying_strategy = create_random_buying_strategy(ingredients_count, max_per_ingredient=10)
-    succes_ratio, spoil_ratio = run_sim(
+    success_ratio, spoil_ratio = run_sim(
         buying_strategy=buying_strategy,
         recipe_book=recipe_book,
         order_max_per_period=10,
@@ -84,4 +83,4 @@ if __name__ == "__main__":
     print(recipe_book)
     print(buying_strategy)
     print("spoil rate: {}".format(spoil_ratio))
-    print("succes rate: {}".format(succes_ratio))
+    print("success rate: {}".format(success_ratio))

@@ -60,4 +60,11 @@ int: stock_factory_MA_mean_relative_w;
 predicate low_ratio_harsh(array[Time] of var 0.0..1.0: value, float: threshold) = forall(t in Time) (value[t] <= threshold);
 predicate high_ratio_harsh(array[Time] of var 0.0..1.0: value, float: threshold) = forall(t in Time) (value[t] >= threshold);
 
-solve minimize topLevelObjective;
+solve minimize sc_lost_ratio_sales_ret[1]
+solve minimize sc_lost_ratio_sales_dis[1]
+solve minimize sc_lost_ratio_sales_fac[1]
+solve maximize stock_customer_MA_mean_relative[1];
+solve maximize stock_distributor_MA_mean_relative[1];
+solve minimize stock_factory_MA_mean_relative[1];
+
+% solve minimize topLevelObjective;

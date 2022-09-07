@@ -1,7 +1,17 @@
 import os
+import sys
+
 import pyNetLogo
-from EM_to_CP.NetlogoNN.Timer import Timer
-from EM_to_CP.NetlogoNN.parameters import load_parameter
+
+
+
+# from EM_to_CP.NetlogoNN.Timer import Timer
+# from EM_to_CP.NetlogoNN.parameters import load_parameter
+
+from Timer import Timer
+from parameters import load_parameter
+
+
 import time
 from pyNetLogo.core import NetLogoException
 from datetime import datetime
@@ -13,6 +23,7 @@ import pandas as pd
 import numpy as np
 from scipy.optimize import curve_fit
 from sys import platform
+
 
 class NetLogoSimulator:
     # filename for outputting simulation data

@@ -1,0 +1,24 @@
+{
+    "openFiles": [
+        "restaurant.mzn",
+        "restaurant.dzn",
+        "../mzn_nn/nn_Sigmoid_2layer.mzn",
+        "../mzn_nn/nn_Sigmoid_pow2_2layer.mzn",
+        "../mzn_nn/nn_Sigmoid_3layer.mzn",
+        "../mzn_soft/restaurant.mzn",
+        "weighted_objectives.mzn"
+    ],
+    "openTab": 0,
+    "projectFiles": [
+        "../mzn_nn/nn_Sigmoid_2layer.mzn",
+        "../mzn_nn/nn_Sigmoid_3layer.mzn",
+        "../mzn_nn/nn_Sigmoid_pow2_2layer.mzn",
+        "../mzn_soft/restaurant.mzn",
+        "restaurant.dzn",
+        "restaurant.mzn",
+        "weighted_objectives.mzn"
+    ],
+    "selectedBuiltinConfigId": "org.jacop.jacop",
+    "selectedBuiltinConfigVersion": "4.8.0",
+    "version": 106
+}
