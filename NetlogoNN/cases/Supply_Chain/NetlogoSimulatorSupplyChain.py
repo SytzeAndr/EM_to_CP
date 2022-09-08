@@ -73,12 +73,13 @@ def run(amount, sampler, log_folder=None):
         simulationTicks=3000,
         log_folder=log_folder,
         timeoutRestartTime=600,
-        num_workers=None
+        num_workers=3
     )
 
 
 if __name__=="__main__":
     # run_qmd_sobol(10)
-    run(1000, ParameterSamplerHalton, log_folder="data_out/supply_chain_halton_v3")
-    run(1000, ParameterSamplerUniform, log_folder="data_out/supply_chain_uniform_v3")
-    run(1000, ParameterSamplerSobol, log_folder="data_out/supply_chain_sobol_v3")
+    numsims = 2000
+    # run(numsims, ParameterSamplerHalton, log_folder="data_out/supply_chain_halton_v3")
+    # run(numsims, ParameterSamplerUniform, log_folder="data_out/supply_chain_uniform_v3")
+    run(numsims, ParameterSamplerSobol, log_folder="data_out/supply_chain_sobol_v3")

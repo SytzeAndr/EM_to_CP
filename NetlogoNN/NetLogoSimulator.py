@@ -5,11 +5,11 @@ import pyNetLogo
 
 
 
-# from EM_to_CP.NetlogoNN.Timer import Timer
-# from EM_to_CP.NetlogoNN.parameters import load_parameter
+from EM_to_CP.NetlogoNN.Timer import Timer
+from EM_to_CP.NetlogoNN.parameters import load_parameter
 
-from Timer import Timer
-from parameters import load_parameter
+# from Timer import Timer
+# from parameters import load_parameter
 
 
 import time
