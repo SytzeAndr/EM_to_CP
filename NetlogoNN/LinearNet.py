@@ -80,8 +80,8 @@ class LinearNet(nn.Module):
         paramsOut = remove_invalid_mzn_chars(paramsOut)
 
         stringOut = "% auto generated file, representing a neural network\n"
-        stringOut += "% features in: {}\n% features out: {}\n% layerCount: {}\n% layerWidth: {}\n\n".format(
-            paramsIn, paramsOut, self.input_and_hidden_layers_count, self.hiddenLayerSize
+        stringOut += "% features in: {}\n% features out: {}\n% hiddenLayers: {}\n% layerWidth: {}\n\n".format(
+            paramsIn, paramsOut, self.input_and_hidden_layers_count - 1, self.hiddenLayerSize
         )
 
         stringOut += "% use these to access output parameters\n"

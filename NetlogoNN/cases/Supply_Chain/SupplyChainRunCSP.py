@@ -1,3 +1,4 @@
+import os
 import sys
 
 sys.path.append("../../")
@@ -29,11 +30,11 @@ def get_parameters_out():
     return [
         "lost_ratio_sales_fac",
         "lost_ratio_sales_dis",
-        "lost_ratio_sales_ret",
-        "stock_customer_MA_mean_relative",
-        "stock_distributor_MA_mean_relative",
-        "stock_retailer_MA_mean_relative",
-        "stock_factory_MA_mean_relative"
+        "lost_ratio_sales_ret"
+        # "stock_customer_MA_mean_relative",
+        # "stock_distributor_MA_mean_relative",
+        # "stock_retailer_MA_mean_relative",
+        # "stock_factory_MA_mean_relative"
     ]
 
 
@@ -53,15 +54,23 @@ def get_static_parameters():
 
 def sample_supply_chain(input):
     netlogo_model_path = "Supply_Chain.nlogo"
-    simulationTicks = 3000
+    simulationTicks = 1000
 
     print("\rloading netlogo model...", end="")
-    netlogo = pyNetLogo.NetLogoLink(
-        gui=False,
-        netlogo_home=load_parameter("netlogo_home"),
-        netlogo_version=load_parameter("netlogo_version"),
-        jvm_home=load_parameter("jvm_home")
-    )
+    if sys.platform == "win32":
+        # windows
+        netlogo = pyNetLogo.NetLogoLink(
+            gui=False
+        )
+    else:
+        # linux
+        netlogo = pyNetLogo.NetLogoLink(
+            gui=False,
+            netlogo_home=load_parameter("netlogo_home"),
+            netlogo_version=load_parameter("netlogo_version"),
+            jvm_home=load_parameter("jvm_home")
+        )
+
     netlogo.load_model(netlogo_model_path)
 
     # set static parameters
@@ -118,28 +127,24 @@ def sample_supply_chain(input):
 
 
 if __name__ == "__main__":
-    experiment_path = "dzn_solutions/halton_4layer_1hour_v2"
+    experiment_path = "dzn_solutions/test4"
     parameters_in = get_parameters_in()
     objectives = get_parameters_out()
 
-    with Timer():
-        create_dzn(
-            num_composites=3,
-            experiment_path=experiment_path,
-            mzn_path="mzn_wgt/supply_chain.mzn",
-            params_in=parameters_in,
-            objectives=objectives
-        )
+    # with Timer():
+    create_dzn(
+        num_composites=15,
+        experiment_path=experiment_path,
+        mzn_path="mzn_wgt/supply_chain.mzn",
+        params_in=parameters_in,
+        objectives=objectives
+    )
 
-    # @Timer
-    # def time_analyze():
-    #     analyze(
-    #         experiment_path=experiment_path,
-    #         params_in=parameters_in,
-    #         params_out=objectives,
-    #         sample_function=sample_supply_chain
-    #     )
-
-    # time_dzn()
-    # time_analyze()
+    # with Timer():
+    analyze(
+        experiment_path=experiment_path,
+        params_in=parameters_in,
+        params_out=objectives,
+        sample_function=sample_supply_chain
+    )
 

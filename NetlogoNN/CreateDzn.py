@@ -112,7 +112,10 @@ def main(num_composites, experiment_path, mzn_path, params_in, objectives):
     # visualize
     all_solutions = pd.read_csv(csv_out)
     filtered_solutions = filter_solutions(all_solutions)
-    filtered_solutions.to_csv(os.path.join(experiment_path, "filtered_solutions.csv"))
+    filtered_solutions.to_csv(
+        os.path.join(experiment_path, "filtered_solutions.csv"),
+        index_label=False
+    )
 
 
 if __name__ == "__main__":

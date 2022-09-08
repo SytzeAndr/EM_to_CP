@@ -1,4 +1,4 @@
-include "../mzn_nn/Supply_Chain_halton_sigmoid_3layer.mzn";
+include "../mzn_nn/Supply_Chain_a-sigmoid_l-4_s-300_o-3_d-halton.mzn";
 include "../../shared/weighted_objectives.mzn";
 
 % set params
@@ -36,28 +36,28 @@ constraint (Distr2 <= Distr1 * 4);
 constraint (Clients_N <= Distr2 * 50);
 
 % define top level objective
-% num_objectives = 3;
-
-% constraint objectives = [
-%   -lost_ratio_sales_fac, 
-%   -lost_ratio_sales_dis, 
-%   -lost_ratio_sales_ret
-% ];
-
-% % define top level objective
-num_objectives = 7;
+num_objectives = 3;
 
 constraint objectives = [
   -lost_ratio_sales_fac, 
   -lost_ratio_sales_dis, 
-  -lost_ratio_sales_ret,
-  stock_customer_MA_mean_relative,
-  stock_distributor_MA_mean_relative,
-  stock_retailer_MA_mean_relative,
-  -stock_factory_MA_mean_relative
+  -lost_ratio_sales_ret
 ];
 
+% % define top level objective
+% num_objectives = 7;
+
+% constraint objectives = [
+%   -lost_ratio_sales_fac, 
+%   -lost_ratio_sales_dis, 
+%   -lost_ratio_sales_ret,
+%   stock_customer_MA_mean_relative,
+%   stock_distributor_MA_mean_relative,
+%   stock_retailer_MA_mean_relative,
+%   -stock_factory_MA_mean_relative
+% ];
+
 % output in json format
-output ["{\"Fact\": \(Fact), \"Distr1\": \(Distr1), \"Distr2\": \(Distr2), \"lost_ratio_sales_fac\": \(lost_ratio_sales_fac), \"lost_ratio_sales_dis\": \(lost_ratio_sales_dis), \"v1_DailyPurchase\": \(v1_DailyPurchase), \"v2_PeriodicallyPurchase\": \(v2_PeriodicallyPurchase), \"v3_Random\": \(v3_Random), \"v1_s_Q\": \(v1_s_Q), \"v2_s_S\": \(v2_s_S), \"v3_R_S\": \(v3_R_S), \"v4_Random\": \(v4_Random), \"lost_ratio_sales_ret\": \(lost_ratio_sales_ret)"]
-% + [" ,\"stock_customer_MA_mean_relative\": \(stock_customer_MA_mean_relative), \"stock_distributor_MA_mean_relative\": \(stock_distributor_MA_mean_relative), \"stock_retailer_MA_mean_relative\": \(stock_retailer_MA_mean_relative), \"stock_factory_MA_mean_relative\": \(stock_factory_MA_mean_relative)}"]
+output ["{\"Fact\": \(Fact), \"Distr1\": \(Distr1), \"Distr2\": \(Distr2), \"lost_ratio_sales_fac\": \(lost_ratio_sales_fac), \"lost_ratio_sales_dis\": \(lost_ratio_sales_dis), \"v1_DailyPurchase\": \(v1_DailyPurchase), \"v2_PeriodicallyPurchase\": \(v2_PeriodicallyPurchase), \"v3_Random\": \(v3_Random), \"v1_s_Q\": \(v1_s_Q), \"v2_s_S\": \(v2_s_S), \"v3_R_S\": \(v3_R_S), \"v4_Random\": \(v4_Random), \"lost_ratio_sales_ret\": \(lost_ratio_sales_ret)}"]
+% + [" ,\"stock_customer_MA_mean_relative\": \(stock_customer_MA_mean_relative), \"stock_distributor_MA_mean_relative\": \(stock_distributor_MA_mean_relative), \"stock_retailer_MA_mean_relative\": \(stock_retailer_MA_mean_relative), \"stock_factory_MA_mean_relative\": \(stock_factory_MA_mean_relative)"
 ;

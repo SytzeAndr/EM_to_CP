@@ -32,6 +32,7 @@ def dataToCategorical(path_in, path_out, categorical_headers, categorical_option
         csv_out = csv_out.append(rowOut, ignore_index=True)
     csv_out.to_csv(path_out)
 
+
 def get_parameters_in():
     parametersInRange = {
         "Fact": [1, 3],
@@ -58,6 +59,7 @@ def get_parameters_in():
 
     return parametersIn
 
+
 def get_parameters_out():
     return [
         "lost_ratio_sales_ret",
@@ -68,6 +70,7 @@ def get_parameters_out():
         # "stock_retailer_MA_mean_relative",
         # "stock_factory_MA_mean_relative"
     ]
+
 
 def trainNeuralNetworkSupplyChain(
         trainingDataPath, tag, max_iters=10e8, max_seconds=300,
@@ -128,20 +131,48 @@ def create_full_tag(tag):
 
 
 if __name__ == "__main__":
-    tag = "halton"
-    folder = f"data_out/supply_chain_{tag}_v3/"
     printTestLabels = False
-    max_seconds = 300
-    testDataPath = "data_out/Supply_Chain_all/data_out_enc.csv"
-    activation = "sigmoid"
-    hiddenLayers = 3
-    tag_suffix = tag + f"_{activation}_{hiddenLayers}layer"
-    print(activation)
-    # trainNeuralNetworkSupplyChain(
-    #     folder, tag_suffix, max_seconds=max_seconds, modelContructor=LinearNetSigmoid,
-    #     hiddenLayers=hiddenLayers,
-    #     testDataPath=testDataPath, printTestLabels=printTestLabels
+    max_seconds = 3600 * 5
+    # max_seconds = 300
+    testDataPath = "sampler_data/uniform_large/data_out_enc.csv"
+
+    def train_and_create(dataset_tag, activation, hiddenLayers, modelArchitecture):
+        folder = f"sampler_data/{dataset_tag}/"
+        tag_suffix = f"a-{activation}_l-{hiddenLayers}_s-{max_seconds}_o-{len(get_parameters_out())}_d-{dataset_tag}"
+        print(tag_suffix)
+        trainNeuralNetworkSupplyChain(
+            folder, tag_suffix, max_seconds=max_seconds, modelContructor=modelArchitecture,
+            hiddenLayers=hiddenLayers,
+            testDataPath=testDataPath, printTestLabels=printTestLabels
+        )
+        create_mzn_by_tag(
+            model_path_in=os.path.join(folder, f"{NetLogoDataFitterNN.FILENAME_PARAM_OUT}{create_full_tag(tag_suffix)}.pt"),
+            mzn_path_out=os.path.join("mzn_nn", create_full_tag(tag_suffix) + ".mzn"),
+            parametersIn=get_parameters_in(),
+            paramsOut=get_parameters_out()
+        )
+
+    train_and_create(
+        dataset_tag="halton",
+        activation="sigmoid",
+        hiddenLayers=4,
+        modelArchitecture=LinearNetSigmoid
+    )
+
+    # train_and_create(
+    #     dataset_tag="sobol",
+    #     activation="sigmoid",
+    #     hiddenLayers=3,
+    #     modelArchitecture=LinearNetSigmoid
     # )
+    #
+    # train_and_create(
+    #     dataset_tag="uniform",
+    #     activation="sigmoid",
+    #     hiddenLayers=3,
+    #     modelArchitecture=LinearNetSigmoid
+    # )
+
     # print("pow2")
     # trainNeuralNetworkSupplyChain(
     #     folder, tag_suffix+"_pow2", max_seconds=max_seconds, modelContructor=LinearNetPow2,
@@ -157,10 +188,4 @@ if __name__ == "__main__":
     #     folder, tag_suffix+"_taylor", max_seconds=max_seconds, modelContructor=LinearNetTaylorSimple,
     #     testDataPath=testDataPath, printTestLabels=printTestLabels
     # )
-    create_mzn_by_tag(
-        model_path_in=os.path.join(folder, f"{NetLogoDataFitterNN.FILENAME_PARAM_OUT}{create_full_tag(tag_suffix)}.pt"),
-        mzn_path_out=os.path.join("mzn_nn", create_full_tag(tag_suffix) + "_3obj" + ".mzn"),
-        parametersIn=get_parameters_in(),
-        paramsOut=get_parameters_out()
-    )
 
