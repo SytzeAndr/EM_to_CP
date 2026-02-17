@@ -1,0 +1,14 @@
+output (([""++format(Fact)++", "++format(Distr1)++", "++format(Distr2)++""]++[", "++format(v1_DailyPurchase)++", "++format(v2_PeriodicallyPurchase)++", "++format(v3_Random)++""])++[", "++format(v1_s_Q)++", "++format(v2_s_S)++", "++format(v3_R_S)++", "++format(v4_Random)++""])++[", "++format(lost_ratio_sales_ret)++", "++format(lost_ratio_sales_dis)++", "++format(lost_ratio_sales_fac)++""];
+int: Fact;
+int: Distr1;
+int: Distr2;
+int: v1_DailyPurchase;
+int: v2_PeriodicallyPurchase;
+int: v3_Random;
+int: v1_s_Q;
+int: v2_s_S;
+int: v3_R_S;
+int: v4_Random;
+float: lost_ratio_sales_ret;
+float: lost_ratio_sales_dis;
+float: lost_ratio_sales_fac;

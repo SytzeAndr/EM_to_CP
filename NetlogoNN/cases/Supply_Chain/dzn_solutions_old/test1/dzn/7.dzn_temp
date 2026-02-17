@@ -1,0 +1,3 @@
+{"Fact": 2, "Distr1": 10, "Distr2": 26, "lost_ratio_sales_fac": 0.05277754209072765}, "lost_ratio_sales_dis": 0.1094556501923314, "v1_DailyPurchase": 0, "v2_PeriodicallyPurchase": 1, "v3_Random": 0, "v1_s_Q": 0, "v2_s_S": 1, "v3_R_S": 0, "v4_Random": 0, "lost_ratio_sales_ret": 5.211955040375752e-06, "stock_customer_MA_mean_relative": 0.0582719707014922, "stock_distributor_MA_mean_relative": 0.2283359676921051, "stock_retailer_MA_mean_relative": 0.2304548879700604, "stock_factory_MA_mean_relative": 0.5066223561825642
+----------
+==========

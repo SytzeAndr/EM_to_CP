@@ -20,3 +20,13 @@ class Timer(object):
         if self.name:
             print('[%s]' % self.name,)
         print("Elapsed: {}".format(self.elapsed()))
+
+
+
+if __name__ == "__main__":
+    # example usage
+    with Timer():
+        # insert code here
+        s = 0
+        for i in range(int(10e7)):
+            s += 1

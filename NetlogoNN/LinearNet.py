@@ -7,10 +7,12 @@ p_dropout_def = 0.1
 
 
 class LinearNet(nn.Module):
-    def __init__(self, n_in, n_out, hiddenLayers, hiddenLayerSize=None, p_dropout=p_dropout_def, tanh=False, softmax=False, relu=False, sigmoid=False):
+    def __init__(self, n_in, n_out, hiddenLayers, hiddenLayerSize=None, p_dropout=p_dropout_def,
+                 tanh=False, softmax=False, relu=False, sigmoid=False, taylor_simple=False, pow2_activation=False,
+                 double_relu=False):
         super(LinearNet, self).__init__()
 
-        self.hiddenLayers = hiddenLayers
+        self.input_and_hidden_layers_count = hiddenLayers + 1
 
         # hiddenlayersize = sqrt(n_in * n_out) + 4
         self.hiddenLayerSize = int(np.round(np.sqrt(np.multiply(n_in, n_out))) + 4) if hiddenLayerSize is None \
@@ -21,9 +23,12 @@ class LinearNet(nn.Module):
         self.softmax = softmax
         self.relu = relu
         self.sigmoid = sigmoid
+        self.taylor_simple = taylor_simple
+        self.pow2_activation = pow2_activation
+        self.double_relu = double_relu
 
         layerList = []
-        for i in range(hiddenLayers):
+        for i in range(self.input_and_hidden_layers_count):
             layerList.append(
                 nn.Linear(
                     in_features=n_in if i == 0 else self.hiddenLayerSize,
@@ -49,6 +54,13 @@ class LinearNet(nn.Module):
             x = torch.relu(x)
         if self.sigmoid:
             x = torch.sigmoid(x)
+        if self.taylor_simple:
+            x = torch.div(1 ,torch.add(1, torch.relu(x)))
+        if self.pow2_activation:
+            x = torch.div(1, torch.add(1, torch.pow(x, 2)))
+        if self.double_relu:
+            # todo: implement in createMinizincFunctions
+            x = torch.clamp(x, 0, 1)
         return x
 
     def createMiniZincFunctions(self, paramsIn, paramsOut, fileout, tag=""):
@@ -68,8 +80,8 @@ class LinearNet(nn.Module):
         paramsOut = remove_invalid_mzn_chars(paramsOut)
 
         stringOut = "% auto generated file, representing a neural network\n"
-        stringOut += "% features in: {}\n% features out: {}\n% layerCount: {}\n% layerWidth: {}\n\n".format(
-            paramsIn, paramsOut, self.hiddenLayers, self.hiddenLayerSize
+        stringOut += "% features in: {}\n% features out: {}\n% hiddenLayers: {}\n% layerWidth: {}\n\n".format(
+            paramsIn, paramsOut, self.input_and_hidden_layers_count - 1, self.hiddenLayerSize
         )
 
         stringOut += "% use these to access output parameters\n"
@@ -77,7 +89,7 @@ class LinearNet(nn.Module):
         for paramOut in paramsOut:
             varRange = "0.0..1.0" if self.tanh else "float"
 
-            stringOut += "array[Time] of var {varRange}: {paramOut};\n".format(varRange=varRange, paramOut=paramOut)
+            stringOut += "var {varRange}: {paramOut};\n".format(varRange=varRange, paramOut=paramOut)
 
         stringOut += "\n\n"
 
@@ -87,14 +99,14 @@ class LinearNet(nn.Module):
             for f1_node in range(linearLayer.out_features):
                 # define variable name of the node
                 nodeName = "n_{layer}_{node}".format(layer=i, node=f1_node) + tag
-                nodeConstraints += "array[Time] of var float: {nodeName};\n".format(nodeName=nodeName)
+                nodeConstraints += "var float: {nodeName};\n".format(nodeName=nodeName)
 
                 # define variable value considering no relu
                 nodeNoMax = ""
                 for ii, paramIn in enumerate(inputs):
                     if ii != 0:
                         nodeNoMax += " + "
-                    nodeNoMax += "{A} * {paramIn}[t]".format(A=float(linearLayer.weight[f1_node, ii]), paramIn=paramIn)
+                    nodeNoMax += "{A} * {paramIn}".format(A=float(linearLayer.weight[f1_node, ii]), paramIn=paramIn)
                 nodeNoMax = "({nodeRep} + {bias})".format(nodeRep=nodeNoMax, bias=float(linearLayer.bias[f1_node]))
                 if relu:
                     nodeRep = "max({nodeNoMax}, 0)".format(nodeNoMax=nodeNoMax)
@@ -102,7 +114,7 @@ class LinearNet(nn.Module):
                     nodeRep = nodeNoMax
 
                 # add node constraint
-                nodeConstraints += "constraint forall(t in Time) ({nodeName}[t] = {nodeRep});\n".format(nodeName=nodeName, nodeRep=nodeRep)
+                nodeConstraints += "constraint ({nodeName} = {nodeRep});\n".format(nodeName=nodeName, nodeRep=nodeRep)
 
                 nodeNames.append(nodeName)
             return nodeConstraints, nodeNames
@@ -124,46 +136,56 @@ class LinearNet(nn.Module):
             for i, paramOut in enumerate(paramsOut):
                 # out values equal tanh put around the last nodes in nodeNames
                 if self.relu:
-                    stringOut += "constraint forall(t in Time) ({paramOut}[t] = max(tanh({lastNode}[t]), 0));\n".format(
+                    stringOut += "constraint ({paramOut} = max(tanh({lastNode}), 0));\n".format(
                     paramOut=paramOut, lastNode=nodeNames[i])
                 else:
-                    stringOut += "constraint forall(t in Time) ({paramOut}[t] = tanh({lastNode}[t]));\n".format(
+                    stringOut += "constraint ({paramOut} = tanh({lastNode}));\n".format(
                     paramOut=paramOut, lastNode=nodeNames[i])
         elif self.sigmoid:
             # behavior for sigmoid
             # sigmoid(x) = 1 / (1 + exp(-x))
             for i, paramOut in enumerate(paramsOut):
-                stringOut += "constraint forall(t in Time) ({paramOut}[t] * (1 + exp(-{lastNode}[t])) = 1.0);\n".format(
+                stringOut += "constraint ({paramOut} * (1 + exp(-{lastNode})) = 1.0);\n".format(
                     paramOut=paramOut, lastNode=nodeNames[i])
         elif self.softmax:
             # behavior for softmax
             # softmax(x_i) = exp(x_i) / sum([exp(x_j) | x_j in X])
             softmaxSumVarName = "expsum"+tag
-            stringOut += "array[Time] of var 0.0..infinity: {softmaxSumVarName};\n".format(softmaxSumVarName=softmaxSumVarName)
+            stringOut += "var 0.0..infinity: {softmaxSumVarName};\n".format(softmaxSumVarName=softmaxSumVarName)
             sumRep = ""
             for i, paramOut in enumerate(paramsOut):
                 # define sum
-                if i is not 0:
+                if i != 0:
                     sumRep += " + "
-                sumRep += "{paramOut}[t]".format(paramOut=paramOut)
+                sumRep += "{paramOut}".format(paramOut=paramOut)
 
-                stringOut += "constraint forall(t in Time) " \
-                             "({paramOut}[t] * {softmaxSumVarName}[t] = exp({lastNode}[t]));\n".format(
+                stringOut += "constraint " \
+                             "({paramOut} * {softmaxSumVarName} = exp({lastNode}));\n".format(
                                 paramOut=paramOut, softmaxSumVarName=softmaxSumVarName, lastNode=nodeNames[i])
 
-            stringOut += "constraint forall(t in Time) ({softmaxSumVarName}[t] = {sumRep});\n".format(
+            stringOut += "constraint ({softmaxSumVarName} = {sumRep});\n".format(
                 softmaxSumVarName=softmaxSumVarName, sumRep=sumRep)
 
         elif self.relu:
             # behavior for relu
             for i, paramOut in enumerate(paramsOut):
                 # relu(x) = max(x,0)
-                stringOut += "constraint forall(t in Time) ({paramOut}[t] = max({lastNode}[t], 0));\n".format(
+                stringOut += "constraint ({paramOut} = max({lastNode}, 0));\n".format(
                     paramOut=paramOut, lastNode=nodeNames[i])
+
+        elif self.taylor_simple:
+            # simple 1 layered taylor approximation of 1 / (1 + exp(-x))
+            for i, paramOut in enumerate(paramsOut):
+                stringOut += f"constraint ({paramOut} = 1 / (1 + max({nodeNames[i]}, 0)));\n"
+
+        elif self.pow2_activation:
+            # simple 1 activation that uses 1 / (1 + x^2)
+            for i, paramOut in enumerate(paramsOut):
+                stringOut += f"constraint ({paramOut} * (1 + {nodeNames[i]} * {nodeNames[i]}) = 1);\n"
 
         else:
             for i, paramOut in enumerate(paramsOut):
-                stringOut += "constraint forall(t in Time) ({paramOut}[t] = {lastNode}[t]);\n".format(
+                stringOut += "constraint ({paramOut} = {lastNode});\n".format(
                     paramOut=paramOut, lastNode=nodeNames[i])
 
         with open(fileout, "w") as file:
@@ -199,3 +221,24 @@ class LinearNetTanhRelu(LinearNet):
     # outputs between 0 and 1
     def __init__(self, n_in, n_out, hiddenLayers=3, hiddenLayerSize=None, p_dropout=p_dropout_def):
         super().__init__(n_in, n_out, hiddenLayers, hiddenLayerSize, p_dropout, tanh=True, relu=True)
+
+
+class LinearNetTaylorSimple(LinearNet):
+    # outputs between 0 and 1
+    # f(x) = 1 / (1 + max(0,x))
+    def __init__(self, n_in, n_out, hiddenLayers=3, hiddenLayerSize=None, p_dropout=p_dropout_def):
+        super().__init__(n_in, n_out, hiddenLayers, hiddenLayerSize, p_dropout, taylor_simple=True)
+
+
+class LinearNetPow2(LinearNet):
+    # outputs between 0 and 1
+    # f(x) = 1 / (1 + x^2)
+    def __init__(self, n_in, n_out, hiddenLayers=3, hiddenLayerSize=None, p_dropout=p_dropout_def):
+        super().__init__(n_in, n_out, hiddenLayers, hiddenLayerSize, p_dropout, pow2_activation=True)
+
+
+class LinearDoubleRelu(LinearNet):
+    # outputs between 0 and 1
+    # f(x) = min(1, max(x, 0))
+    def __init__(self, n_in, n_out, hiddenLayers=3, hiddenLayerSize=None, p_dropout=p_dropout_def):
+        super().__init__(n_in, n_out, hiddenLayers, hiddenLayerSize, p_dropout, double_relu=True)

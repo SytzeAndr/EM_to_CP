@@ -1,59 +1,72 @@
 % auto generated file, representing a neural network
 % features in: ['buy1', 'buy2']
-% features out: ['succes_ratio', 'spoil_ratio']
-% layerCount: 3
+% features out: ['success_ratio', 'spoil_ratio']
+% layerCount: 4
 % layerWidth: 6
 
 % use these to access output parameters
-array[Time] of var float: succes_ratio;
-array[Time] of var float: spoil_ratio;
+var float: success_ratio;
+var float: spoil_ratio;
 
 
 % Node constraints
 % Layer 0
-array[Time] of var float: n_0_0_3layer_sig;
-constraint forall(t in Time) (n_0_0_3layer_sig[t] = max((0.031253017485141754 * buy1[t] + -0.20745933055877686 * buy2[t] + -0.30410099029541016), 0));
-array[Time] of var float: n_0_1_3layer_sig;
-constraint forall(t in Time) (n_0_1_3layer_sig[t] = max((0.7125085592269897 * buy1[t] + 0.8776071667671204 * buy2[t] + 0.5465533137321472), 0));
-array[Time] of var float: n_0_2_3layer_sig;
-constraint forall(t in Time) (n_0_2_3layer_sig[t] = max((0.5132951736450195 * buy1[t] + 0.16624721884727478 * buy2[t] + -0.6371250152587891), 0));
-array[Time] of var float: n_0_3_3layer_sig;
-constraint forall(t in Time) (n_0_3_3layer_sig[t] = max((-0.21240316331386566 * buy1[t] + 0.10402179509401321 * buy2[t] + 0.6058915257453918), 0));
-array[Time] of var float: n_0_4_3layer_sig;
-constraint forall(t in Time) (n_0_4_3layer_sig[t] = max((-0.4307684302330017 * buy1[t] + 0.3806377649307251 * buy2[t] + 0.8494874238967896), 0));
-array[Time] of var float: n_0_5_3layer_sig;
-constraint forall(t in Time) (n_0_5_3layer_sig[t] = max((0.3042387366294861 * buy1[t] + -0.520136833190918 * buy2[t] + 0.749871015548706), 0));
+var float: n_0_0_3layer;
+constraint (n_0_0_3layer = max((-0.6047012209892273 * buy1 + 0.4016667604446411 * buy2 + 0.23410692811012268), 0));
+var float: n_0_1_3layer;
+constraint (n_0_1_3layer = max((-0.4074420928955078 * buy1 + 0.3091166317462921 * buy2 + -0.015258103609085083), 0));
+var float: n_0_2_3layer;
+constraint (n_0_2_3layer = max((0.22948110103607178 * buy1 + -0.39354395866394043 * buy2 + 0.39221498370170593), 0));
+var float: n_0_3_3layer;
+constraint (n_0_3_3layer = max((0.19999635219573975 * buy1 + 0.5915346741676331 * buy2 + -1.0206886529922485), 0));
+var float: n_0_4_3layer;
+constraint (n_0_4_3layer = max((0.5351971983909607 * buy1 + -0.649093508720398 * buy2 + 0.15188691020011902), 0));
+var float: n_0_5_3layer;
+constraint (n_0_5_3layer = max((0.4634099006652832 * buy1 + 0.3000238537788391 * buy2 + -0.5204540491104126), 0));
 % Layer 1
-array[Time] of var float: n_1_0_3layer_sig;
-constraint forall(t in Time) (n_1_0_3layer_sig[t] = max((0.057834699749946594 * n_0_0_3layer_sig[t] + 0.618968665599823 * n_0_1_3layer_sig[t] + 0.09958269447088242 * n_0_2_3layer_sig[t] + 0.6651567220687866 * n_0_3_3layer_sig[t] + -0.27969181537628174 * n_0_4_3layer_sig[t] + 0.7847997546195984 * n_0_5_3layer_sig[t] + 0.3659588694572449), 0));
-array[Time] of var float: n_1_1_3layer_sig;
-constraint forall(t in Time) (n_1_1_3layer_sig[t] = max((-0.10490575432777405 * n_0_0_3layer_sig[t] + -0.2082138955593109 * n_0_1_3layer_sig[t] + 0.46031704545021057 * n_0_2_3layer_sig[t] + -0.12151625007390976 * n_0_3_3layer_sig[t] + -0.0070152245461940765 * n_0_4_3layer_sig[t] + -0.28927722573280334 * n_0_5_3layer_sig[t] + 0.5753110647201538), 0));
-array[Time] of var float: n_1_2_3layer_sig;
-constraint forall(t in Time) (n_1_2_3layer_sig[t] = max((-0.07352659106254578 * n_0_0_3layer_sig[t] + 0.436151385307312 * n_0_1_3layer_sig[t] + 0.18374063074588776 * n_0_2_3layer_sig[t] + -0.7590959668159485 * n_0_3_3layer_sig[t] + 0.5500527024269104 * n_0_4_3layer_sig[t] + -0.6954249143600464 * n_0_5_3layer_sig[t] + 0.25316956639289856), 0));
-array[Time] of var float: n_1_3_3layer_sig;
-constraint forall(t in Time) (n_1_3_3layer_sig[t] = max((0.050211891531944275 * n_0_0_3layer_sig[t] + -0.07222486287355423 * n_0_1_3layer_sig[t] + 0.23159901797771454 * n_0_2_3layer_sig[t] + 0.043185506016016006 * n_0_3_3layer_sig[t] + 0.7497729659080505 * n_0_4_3layer_sig[t] + -0.0006594173610210419 * n_0_5_3layer_sig[t] + -0.6235331296920776), 0));
-array[Time] of var float: n_1_4_3layer_sig;
-constraint forall(t in Time) (n_1_4_3layer_sig[t] = max((-0.051155537366867065 * n_0_0_3layer_sig[t] + -0.2739808261394501 * n_0_1_3layer_sig[t] + 0.6156389713287354 * n_0_2_3layer_sig[t] + -0.362136572599411 * n_0_3_3layer_sig[t] + 0.6886484026908875 * n_0_4_3layer_sig[t] + -0.16690906882286072 * n_0_5_3layer_sig[t] + 0.37508851289749146), 0));
-array[Time] of var float: n_1_5_3layer_sig;
-constraint forall(t in Time) (n_1_5_3layer_sig[t] = max((0.1537855565547943 * n_0_0_3layer_sig[t] + -0.059522926807403564 * n_0_1_3layer_sig[t] + -0.039449386298656464 * n_0_2_3layer_sig[t] + 0.08574288338422775 * n_0_3_3layer_sig[t] + -0.13761162757873535 * n_0_4_3layer_sig[t] + -0.12056490778923035 * n_0_5_3layer_sig[t] + -0.1952608823776245), 0));
+var float: n_1_0_3layer;
+constraint (n_1_0_3layer = max((-0.22581025958061218 * n_0_0_3layer + -0.23101511597633362 * n_0_1_3layer + -0.3631053864955902 * n_0_2_3layer + 0.4915606379508972 * n_0_3_3layer + 0.002548704156652093 * n_0_4_3layer + 0.35797321796417236 * n_0_5_3layer + 0.14518864452838898), 0));
+var float: n_1_1_3layer;
+constraint (n_1_1_3layer = max((-0.34922271966934204 * n_0_0_3layer + 0.3305462598800659 * n_0_1_3layer + 0.4251370429992676 * n_0_2_3layer + -0.05466366559267044 * n_0_3_3layer + -0.22960130870342255 * n_0_4_3layer + -0.049902673810720444 * n_0_5_3layer + 0.3230504095554352), 0));
+var float: n_1_2_3layer;
+constraint (n_1_2_3layer = max((0.4120725095272064 * n_0_0_3layer + 0.2076452672481537 * n_0_1_3layer + 0.30326002836227417 * n_0_2_3layer + 0.05669695883989334 * n_0_3_3layer + 0.5190261006355286 * n_0_4_3layer + -0.03645021840929985 * n_0_5_3layer + 0.2367381453514099), 0));
+var float: n_1_3_3layer;
+constraint (n_1_3_3layer = max((0.33455488085746765 * n_0_0_3layer + 0.5530825853347778 * n_0_1_3layer + 0.630104660987854 * n_0_2_3layer + 0.5540006756782532 * n_0_3_3layer + 0.6207306981086731 * n_0_4_3layer + 0.5848358273506165 * n_0_5_3layer + 0.23783469200134277), 0));
+var float: n_1_4_3layer;
+constraint (n_1_4_3layer = max((0.31474563479423523 * n_0_0_3layer + 1.143934726715088 * n_0_1_3layer + 0.3964973986148834 * n_0_2_3layer + 0.21900656819343567 * n_0_3_3layer + 0.0963926836848259 * n_0_4_3layer + 0.26789963245391846 * n_0_5_3layer + 0.20270079374313354), 0));
+var float: n_1_5_3layer;
+constraint (n_1_5_3layer = max((-0.650606632232666 * n_0_0_3layer + -0.5726366639137268 * n_0_1_3layer + -0.13628117740154266 * n_0_2_3layer + 0.13607589900493622 * n_0_3_3layer + -0.005140720866620541 * n_0_4_3layer + 0.15516525506973267 * n_0_5_3layer + -0.050854090601205826), 0));
 % Layer 2
-array[Time] of var float: n_2_0_3layer_sig;
-constraint forall(t in Time) (n_2_0_3layer_sig[t] = max((-0.49023300409317017 * n_1_0_3layer_sig[t] + 1.0664085149765015 * n_1_1_3layer_sig[t] + -0.004040065221488476 * n_1_2_3layer_sig[t] + 0.5354564785957336 * n_1_3_3layer_sig[t] + -0.30896541476249695 * n_1_4_3layer_sig[t] + 0.1461101472377777 * n_1_5_3layer_sig[t] + 0.16579541563987732), 0));
-array[Time] of var float: n_2_1_3layer_sig;
-constraint forall(t in Time) (n_2_1_3layer_sig[t] = max((-0.19528907537460327 * n_1_0_3layer_sig[t] + -0.14401781558990479 * n_1_1_3layer_sig[t] + -0.0756697803735733 * n_1_2_3layer_sig[t] + -0.08487246930599213 * n_1_3_3layer_sig[t] + -0.07238763570785522 * n_1_4_3layer_sig[t] + 0.1964646279811859 * n_1_5_3layer_sig[t] + -0.12240870296955109), 0));
-array[Time] of var float: n_2_2_3layer_sig;
-constraint forall(t in Time) (n_2_2_3layer_sig[t] = max((-0.10105282068252563 * n_1_0_3layer_sig[t] + 0.458048015832901 * n_1_1_3layer_sig[t] + 0.04814422130584717 * n_1_2_3layer_sig[t] + -3.3247275352478027 * n_1_3_3layer_sig[t] + 1.5966987609863281 * n_1_4_3layer_sig[t] + 0.12238697707653046 * n_1_5_3layer_sig[t] + 0.6866620779037476), 0));
-array[Time] of var float: n_2_3_3layer_sig;
-constraint forall(t in Time) (n_2_3_3layer_sig[t] = max((0.09720700234174728 * n_1_0_3layer_sig[t] + -2.03377628326416 * n_1_1_3layer_sig[t] + 0.8303729295730591 * n_1_2_3layer_sig[t] + -0.5767341256141663 * n_1_3_3layer_sig[t] + -0.6725355386734009 * n_1_4_3layer_sig[t] + 0.16612038016319275 * n_1_5_3layer_sig[t] + -0.12898068130016327), 0));
-array[Time] of var float: n_2_4_3layer_sig;
-constraint forall(t in Time) (n_2_4_3layer_sig[t] = max((0.7283750772476196 * n_1_0_3layer_sig[t] + 0.6704211831092834 * n_1_1_3layer_sig[t] + -0.23032274842262268 * n_1_2_3layer_sig[t] + 1.188297152519226 * n_1_3_3layer_sig[t] + -0.5857768058776855 * n_1_4_3layer_sig[t] + 0.1022336333990097 * n_1_5_3layer_sig[t] + 0.7498317360877991), 0));
-array[Time] of var float: n_2_5_3layer_sig;
-constraint forall(t in Time) (n_2_5_3layer_sig[t] = max((0.19864362478256226 * n_1_0_3layer_sig[t] + -1.8989592790603638 * n_1_1_3layer_sig[t] + 0.06931592524051666 * n_1_2_3layer_sig[t] + -1.589583396911621 * n_1_3_3layer_sig[t] + -1.004448652267456 * n_1_4_3layer_sig[t] + -0.056537359952926636 * n_1_5_3layer_sig[t] + -0.5658463835716248), 0));
+var float: n_2_0_3layer;
+constraint (n_2_0_3layer = max((0.04062211886048317 * n_1_0_3layer + 0.3018442392349243 * n_1_1_3layer + 0.3765578866004944 * n_1_2_3layer + 0.20668455958366394 * n_1_3_3layer + 0.5781722068786621 * n_1_4_3layer + -0.2473323941230774 * n_1_5_3layer + 0.13409048318862915), 0));
+var float: n_2_1_3layer;
+constraint (n_2_1_3layer = max((0.3509286940097809 * n_1_0_3layer + -0.20070339739322662 * n_1_1_3layer + -0.11291471868753433 * n_1_2_3layer + 0.2678614854812622 * n_1_3_3layer + 0.09973014146089554 * n_1_4_3layer + -0.018661214038729668 * n_1_5_3layer + -0.1862867921590805), 0));
+var float: n_2_2_3layer;
+constraint (n_2_2_3layer = max((-0.41521701216697693 * n_1_0_3layer + 0.7796410918235779 * n_1_1_3layer + 0.560745120048523 * n_1_2_3layer + 0.3715178966522217 * n_1_3_3layer + 0.030184190720319748 * n_1_4_3layer + -0.43311652541160583 * n_1_5_3layer + -0.03265591338276863), 0));
+var float: n_2_3_3layer;
+constraint (n_2_3_3layer = max((0.1949482560157776 * n_1_0_3layer + -0.024188769981265068 * n_1_1_3layer + 0.3031006455421448 * n_1_2_3layer + 0.08635751157999039 * n_1_3_3layer + 0.3830631971359253 * n_1_4_3layer + -0.3702232539653778 * n_1_5_3layer + -0.38590115308761597), 0));
+var float: n_2_4_3layer;
+constraint (n_2_4_3layer = max((0.3398817777633667 * n_1_0_3layer + -0.4506831169128418 * n_1_1_3layer + -0.28255435824394226 * n_1_2_3layer + 0.16820953786373138 * n_1_3_3layer + -0.12368324398994446 * n_1_4_3layer + -0.15279622375965118 * n_1_5_3layer + 0.22023148834705353), 0));
+var float: n_2_5_3layer;
+constraint (n_2_5_3layer = max((0.4232623875141144 * n_1_0_3layer + -0.32720547914505005 * n_1_1_3layer + 0.2358095496892929 * n_1_2_3layer + 0.5876237154006958 * n_1_3_3layer + 0.2900635302066803 * n_1_4_3layer + -0.1000945195555687 * n_1_5_3layer + 0.11386914551258087), 0));
 % Layer 3
-array[Time] of var float: n_3_0_3layer_sig;
-constraint forall(t in Time) (n_3_0_3layer_sig[t] = (1.2583991289138794 * n_2_0_3layer_sig[t] + 0.05236397683620453 * n_2_1_3layer_sig[t] + -0.5586700439453125 * n_2_2_3layer_sig[t] + 0.9415854215621948 * n_2_3_3layer_sig[t] + -0.5379956364631653 * n_2_4_3layer_sig[t] + 0.7698145508766174 * n_2_5_3layer_sig[t] + -0.7583211660385132));
-array[Time] of var float: n_3_1_3layer_sig;
-constraint forall(t in Time) (n_3_1_3layer_sig[t] = (-0.1573522835969925 * n_2_0_3layer_sig[t] + -0.005730045028030872 * n_2_1_3layer_sig[t] + -2.9321248531341553 * n_2_2_3layer_sig[t] + -0.550321102142334 * n_2_3_3layer_sig[t] + 0.7119452357292175 * n_2_4_3layer_sig[t] + 0.4322153329849243 * n_2_5_3layer_sig[t] + 0.5497444272041321));
+var float: n_3_0_3layer;
+constraint (n_3_0_3layer = max((0.0621756985783577 * n_2_0_3layer + 0.44619420170783997 * n_2_1_3layer + -0.21995966136455536 * n_2_2_3layer + -0.1845790445804596 * n_2_3_3layer + 0.33796927332878113 * n_2_4_3layer + 0.1509290188550949 * n_2_5_3layer + 0.02116176299750805), 0));
+var float: n_3_1_3layer;
+constraint (n_3_1_3layer = max((0.22456519305706024 * n_2_0_3layer + -0.29222965240478516 * n_2_1_3layer + 0.6064924001693726 * n_2_2_3layer + 0.44033119082450867 * n_2_3_3layer + -0.3766525983810425 * n_2_4_3layer + 0.46271538734436035 * n_2_5_3layer + 0.03393558785319328), 0));
+var float: n_3_2_3layer;
+constraint (n_3_2_3layer = max((0.2081579864025116 * n_2_0_3layer + -0.21071237325668335 * n_2_1_3layer + 0.29632896184921265 * n_2_2_3layer + -0.17282555997371674 * n_2_3_3layer + -0.26173263788223267 * n_2_4_3layer + 0.10281311720609665 * n_2_5_3layer + 0.3036918640136719), 0));
+var float: n_3_3_3layer;
+constraint (n_3_3_3layer = max((-0.23167844116687775 * n_2_0_3layer + 0.06885077804327011 * n_2_1_3layer + 0.17779186367988586 * n_2_2_3layer + 0.046461645513772964 * n_2_3_3layer + 0.014406019821763039 * n_2_4_3layer + -0.11823713779449463 * n_2_5_3layer + -0.22785209119319916), 0));
+var float: n_3_4_3layer;
+constraint (n_3_4_3layer = max((-0.34205707907676697 * n_2_0_3layer + -0.06317513436079025 * n_2_1_3layer + 0.1399073749780655 * n_2_2_3layer + -0.055139921605587006 * n_2_3_3layer + -0.3620941638946533 * n_2_4_3layer + -0.06705980002880096 * n_2_5_3layer + 0.010900855995714664), 0));
+var float: n_3_5_3layer;
+constraint (n_3_5_3layer = max((0.19938454031944275 * n_2_0_3layer + 0.29160431027412415 * n_2_1_3layer + -0.3521007299423218 * n_2_2_3layer + 0.32527145743370056 * n_2_3_3layer + 0.026727158576250076 * n_2_4_3layer + 0.39179569482803345 * n_2_5_3layer + -0.14468611776828766), 0));
+% Layer 4
+var float: n_4_0_3layer;
+constraint (n_4_0_3layer = (0.3889036774635315 * n_3_0_3layer + -0.3758948743343353 * n_3_1_3layer + -0.39799052476882935 * n_3_2_3layer + 0.3008168935775757 * n_3_3_3layer + -0.10936852544546127 * n_3_4_3layer + 0.5392680764198303 * n_3_5_3layer + -0.3824690878391266));
+var float: n_4_1_3layer;
+constraint (n_4_1_3layer = (-0.3504035472869873 * n_3_0_3layer + 0.5736353993415833 * n_3_1_3layer + 0.1951206922531128 * n_3_2_3layer + 0.205302432179451 * n_3_3_3layer + -0.06463745981454849 * n_3_4_3layer + 0.24649319052696228 * n_3_5_3layer + -0.601090669631958));
 % Add activation function
-constraint forall(t in Time) (succes_ratio[t] * (1 + exp(-n_3_0_3layer_sig[t])) = 1.0);
-constraint forall(t in Time) (spoil_ratio[t] * (1 + exp(-n_3_1_3layer_sig[t])) = 1.0);
+constraint (success_ratio * (1 + exp(-n_4_0_3layer)) = 1.0);
+constraint (spoil_ratio * (1 + exp(-n_4_1_3layer)) = 1.0);

@@ -1,0 +1,5 @@
+
+# custom parameters file (should be set manually by the user)
+NetlogoNN/parameters.json
+
+**__pycache__**

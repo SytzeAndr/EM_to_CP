@@ -1,7 +1,6 @@
 from Timer import Timer
 import pandas as pd
-from NetLogoSimulator import NetLogoSimulator
-from LinearNet import LinearNet
+# from NetLogoSimulator import NetLogoSimulator
 from matplotlib import pyplot as plt
 
 from sklearn.metrics import mean_squared_error, mean_absolute_percentage_error
@@ -18,9 +17,12 @@ class NetLogoDataFitterNN():
     # filename for outputting model parameters that fit the simulated data (used for feeding the CP model)
     FILENAME_PARAM_OUT = "model_out"
 
+    # FILENAME_DATA_OUT = NetLogoSimulator.FILENAME_DATA_OUT
+    FILENAME_DATA_OUT = "data_out.csv"
+
     # HEADER_PARAM_OUT = "parameterOut"
 
-    def __init__(self, dataFolder, parametersIn, parametersOut, net, tag="", data_filename=NetLogoSimulator.FILENAME_DATA_OUT):
+    def __init__(self, dataFolder, parametersIn, parametersOut, net, tag="", data_filename=FILENAME_DATA_OUT):
         self.dataFolder = dataFolder
         self.data_filename = data_filename
         self.parametersIn = parametersIn

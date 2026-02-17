@@ -1,6 +1,17 @@
 import os
+import sys
+
 import pyNetLogo
-from Timer import Timer
+
+
+
+from EM_to_CP.NetlogoNN.Timer import Timer
+from EM_to_CP.NetlogoNN.parameters import load_parameter
+
+# from Timer import Timer
+# from parameters import load_parameter
+
+
 import time
 from pyNetLogo.core import NetLogoException
 from datetime import datetime
@@ -11,61 +22,131 @@ from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
 from scipy.optimize import curve_fit
+from sys import platform
 
 
-class NetLogoSimulator():
-
+class NetLogoSimulator:
     # filename for outputting simulation data
     FILENAME_DATA_OUT = "data_out.csv"
+    FILENAME_INDICES_PERFORMED = "indices_performed.txt"
 
     # main folder where data is stored
     FOLDERNAME_DATA_OUT = "data_out/"
 
-    def __init__(self, simulationParameterInRange, simulationParameterOut, modelDefaultParameters, modelFilename, tag=""):
-        self.simulationParameterInRange = simulationParameterInRange
+    def __init__(
+            self,
+            simulationParameterInRange,
+            simulationParameterOut,
+            modelDefaultParameters,
+            modelFilename,
+            parameter_sampler_constructor,
+            tag=""
+    ):
         self.simulationParameterOut = simulationParameterOut
         self.modelDefaultParameters = modelDefaultParameters
         self.modelFilename = modelFilename
+        self.parameter_sampler = parameter_sampler_constructor(simulationParameterInRange)
         self.tag = tag
 
-    def run(self, randomParametersCount=1000, simulationTicks=10000, cores=None, timeoutRestartTime=None):
-        # create folder where we store data corresponding to this run
-        dateTimeObj = datetime.now()
-        timestampStr = dateTimeObj.strftime("%y%m%d-%H%M%S")
+    def get_start_index(self):
+        # based on the number of data rows present in the data file
+        return len(pd.read_csv(self.getDataOutFilename()))
 
-        self.logFolder = NetLogoSimulator.FOLDERNAME_DATA_OUT + self.tag + timestampStr + "/"
+    def mark_index_performed(self, index):
+        with open(self.getIndicesPerformedFilename(), 'a') as file:
+            file.write(f"{index}\n")
+
+    def get_indices_performed(self):
+        with open(self.getIndicesPerformedFilename(), 'r') as file:
+            res = [int(line.rstrip()) for line in file]
+            print(f"indices performed: {res}")
+            return res
+            # return file.readLines()
+
+    def run(self, randomParametersCount=1000, simulationTicks=10000, num_workers=None, timeoutRestartTime=None, log_folder=None):
+        # create folder to store sim data
+        if log_folder is None:
+            dateTimeObj = datetime.now()
+            timestampStr = dateTimeObj.strftime("%y%m%d-%H%M%S")
+            self.logFolder = NetLogoSimulator.FOLDERNAME_DATA_OUT + self.tag + timestampStr + "/"
+        else:
+            self.logFolder = log_folder
+
         if not os.path.exists(self.logFolder):
             os.makedirs(self.logFolder)
-        # create file and write header
+
         filename = self.getDataOutFilename()
 
-        with open(filename, "w") as file:
-            file.write(",".join(list(self.simulationParameterInRange.keys()) + self.simulationParameterOut) + "\n")
+        if not os.path.exists(filename):
+            # create new csv file
+            with open(filename, "w") as file:
+                file.write(",".join(list(
+                    self.parameter_sampler.simulation_parameters_in_range.keys()) + self.simulationParameterOut) + "\n"
+                           )
+
+        if not os.path.exists(self.getIndicesPerformedFilename()):
+            # create file if non-existent
+            open(self.getIndicesPerformedFilename(), 'w')
 
         processList = []
 
-        def fillProcessList(cores):
-            # create java environment per cpu
-            processList.clear()
-            if cores is None:
-                cores = mp.cpu_count()
-            sims_per_core = int(np.ceil(randomParametersCount / cores))
-            sims_assigned = 0
-            for i in range(cores):
-                if sims_assigned + sims_per_core > randomParametersCount:
-                    sims_per_core = randomParametersCount - sims_assigned
-                sims_assigned += sims_per_core
-                # do simulation
-                process = mp.Process(target=self.simulate,
-                                     args=(sims_per_core, simulationTicks, filename), name=str(i))
-                processList.append(process)
-                process.start()
+        # define number of cores, but leave one free
+        if num_workers is None:
+            num_workers = mp.cpu_count() - 1
 
-        fillProcessList(cores)
+        # start_index_start = self.get_start_index()
+
+        # define parameter combinations to evaluate
+        all_parameter_combinations = self.parameter_sampler.create_parameter_combinations(
+            amount=randomParametersCount
+        )
+
+        def fill_process_list():
+            # clear all processes
+            processList.clear()
+
+            # retrieve what processes have been performed
+            performed_indices = self.get_indices_performed()
+
+            to_perform_indices = [
+                i for i in range(randomParametersCount)
+                if i not in performed_indices
+            ]
+
+            # distribute to_perform_indices among cpu's
+            indices_per_core = [[] for _ in range(num_workers)]
+            for key_i, value_i in enumerate(to_perform_indices):
+                worker_to_assign_to = np.mod(key_i, num_workers)
+                indices_per_core[worker_to_assign_to] += [value_i]
+
+            print(f"indices_per_core:{indices_per_core}")
+
+            # create java environment per cpu
+            for i in range(num_workers):
+                # input_params_this_core = all_parameter_combinations[indices_per_core[i]]
+                input_params_this_core = [all_parameter_combinations[int(ii)] for ii in indices_per_core[i]]
+                parameter_indices = indices_per_core[i]
+                p = mp.Process(
+                    target=self.simulate,
+                    args=(input_params_this_core, simulationTicks, filename, parameter_indices),
+                    name=str(i)
+                )
+                processList.append(p)
+                p.start()
+
+        fill_process_list()
+
         with Timer("simulation"):
             # endless sim runs with restarts every timeoutRestart seconds
             start = time.time()
             while timeoutRestartTime is not None:
+                # if sims have been performed, break
+                if len(self.get_indices_performed()) >= randomParametersCount:
+                    print("done simulating")
+                    for p in processList:
+                        p.terminate()
+                    return
+
                 while time.time() - start <= timeoutRestartTime:
                     # check every 10 seconds
                     time.sleep(10)
@@ -74,46 +155,39 @@ class NetLogoSimulator():
                     start = time.time()
                     for p in processList:
                         p.terminate()
-                    fillProcessList(cores)
-
+                    fill_process_list()
             else:
                 # do normal joining of processes
                 for process in processList:
                     process.join()
 
-    def sampleParameterCombination(self):
-        parameterCombination = {}
-        for parametername, parameterrange in self.simulationParameterInRange.items():
-            if len(parameterrange) == 1:
-                parameterCombination[parametername] = parameterrange[0]
-            elif type(parameterrange[0]) == int:
-                # the parameter is an int
-                parameterCombination[parametername] = np.random.randint(parameterrange[0], parameterrange[1])
-            else:
-                # the parameter is a float
-                parameterCombination[parametername] = np.random.uniform(parameterrange[0], parameterrange[1])
-        return parameterCombination
-
-    def simulate(self, randomParametersCount, simulationTicks, filename):
+    def simulate(self, parameter_combinations, simulation_ticks, filename, parameter_indices):
         # load model
-        netlogo = pyNetLogo.NetLogoLink(gui=False)  # , netlogo_version="6.1")
+        print("start simulation...")
+        # print(f"file:{__file__}")
+        netlogo = pyNetLogo.NetLogoLink(
+            gui=False,
+            netlogo_home=load_parameter("netlogo_home"),
+            netlogo_version=load_parameter("netlogo_version"),
+            jvm_home=load_parameter("jvm_home")
+        )  # , netlogo_version="6.1")
         netlogo.load_model(self.modelFilename)
+
         # setup default parameters
         NetLogoSimulator.setModelParameters(netlogo, self.modelDefaultParameters)
 
-        for i in range(randomParametersCount):
+        for i, parameter_combination in enumerate(parameter_combinations):
             # create parameters and set to model
-            parameterCombination = self.sampleParameterCombination()
-            NetLogoSimulator.setModelParameters(netlogo, parameterCombination)
+            NetLogoSimulator.setModelParameters(netlogo, parameter_combination)
 
             try:
                 # run simulation
                 netlogo.command('setup')
-                netlogo.repeat_command('go', simulationTicks)
+                netlogo.repeat_command('go', simulation_ticks)
 
                 toWrite = ""
                 # write parameters used
-                toWrite += ",".join(list(map(lambda x: str(x), parameterCombination.values())))
+                toWrite += ",".join(list(map(lambda x: str(x), parameter_combination.values())))
                 # write observed values
                 for paramaterOutField in self.simulationParameterOut:
                     toWrite += "," + str(netlogo.report(paramaterOutField))
@@ -122,6 +196,7 @@ class NetLogoSimulator():
                 with open(filename, "a") as file:
                     file.write(toWrite)
                     file.write("\n")
+                self.mark_index_performed(parameter_indices[i])
                 print("{}_{}: {}".format(mp.current_process().name, i, toWrite))
 
             except Exception:
@@ -130,7 +205,10 @@ class NetLogoSimulator():
         netlogo.kill_workspace()
 
     def getDataOutFilename(self):
-        return self.logFolder + NetLogoSimulator.FILENAME_DATA_OUT
+        return os.path.join(self.logFolder, NetLogoSimulator.FILENAME_DATA_OUT)
+
+    def getIndicesPerformedFilename(self):
+        return os.path.join(self.logFolder, self.FILENAME_INDICES_PERFORMED)
 
     @staticmethod
     def setModelParameters(netlogoModel, parameters):

@@ -1,0 +1,7 @@
+path=dzn_solutions/test3
+MSE=0.002282716248856988
+num_composites=10
+num_filtered=4
+num_pareto=1
+pareto_ratio=0.1
+pareto_ratio_filtered=0.25

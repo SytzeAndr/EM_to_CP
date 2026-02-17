@@ -1,6 +1,6 @@
-# Flexible Enterprise Optimization With Constraint Programming
+# Neuro-Symbolic Enterprise Optimisation
 
-This repository contains experimental code for applying constraint programming to enterprise simulation. More details can be read [here](http://resolver.tudelft.nl/uuid:7d67baa1-6e28-407a-9cab-9cd67e592d8e). The experiments are based on how enterprise models can be "solved" through CP.
+This repository contains experimental code for applying constraint programming to enterprise simulation. The experiments are based on how enterprise models can be "solved" through CP.
 
 The CP language used is [MiniZinc](https://www.minizinc.org/). [MiniBrass](http://isse-augsburg.github.io/minibrass/), an extension to MiniZinc, was used to implement soft constraints. For solving instances regarding a neural network embedding (cases from NetlogoNN), I recommend using [JaCoP](https://github.com/radsz/jacop) as solver.
 Python was used for writing experimental scripts. Simulation models were made in [NetLogo](https://ccl.northwestern.edu/netlogo/). A combination of [PyTorch](https://pytorch.org/) with [CUDA](https://developer.nvidia.com/cuda-python) was used to design and train Neural Networks.
