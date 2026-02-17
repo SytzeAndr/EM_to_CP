@@ -1,17 +1,24 @@
-# Flexible Enterprise Optimization With Constraint Programming
+# Neuro-Symbolic Enterprise Optimisation
 
-This repository contains experimental code for applying constraint programming to enterprise simulation. More details can be read [here](http://resolver.tudelft.nl/uuid:7d67baa1-6e28-407a-9cab-9cd67e592d8e). The experiments are based on how enterprise models can be "solved" through CP.
+This repository contains experimental code for applying constraint programming to enterprise simulation. The experiments are based on how enterprise models can be "solved" through CP.
 
 The CP language used is [MiniZinc](https://www.minizinc.org/). [MiniBrass](http://isse-augsburg.github.io/minibrass/), an extension to MiniZinc, was used to implement soft constraints. For solving instances regarding a neural network embedding (cases from NetlogoNN), I recommend using [JaCoP](https://github.com/radsz/jacop) as solver.
 Python was used for writing experimental scripts. Simulation models were made in [NetLogo](https://ccl.northwestern.edu/netlogo/). A combination of [PyTorch](https://pytorch.org/) with [CUDA](https://developer.nvidia.com/cuda-python) was used to design and train Neural Networks.
 
-Code is free to use for further experimenting, however, if you do so, please cite [my thesis](http://resolver.tudelft.nl/uuid:7d67baa1-6e28-407a-9cab-9cd67e592d8e).
+Code is free to use for further experimenting, however, if you do so, please cite [our corresponding paper](https://doi.org/10.1007/978-3-031-11520-2_5).
 ```
-@article{2021_Andringa_,
-	author = {Andringa, S.P.E},
-	title = {Applying Constraint Programming To Enterprise Modelling},
-	publisher = {Delft University of Technology},
-	year = {2021}
+@article{2022_Andringa_flexible_EO_with_CP,
+	author="Andringa, Sytze P. E.
+	and Yorke-Smith, Neil",
+	editor="Aveiro, David
+	and Proper, Henderik A.
+	and Guerreiro, S{\'e}rgio
+	and de Vries, Marne",
+	title="Flexible Enterprise Optimization with Constraint Programming",
+	booktitle="Advances in Enterprise Engineering XV",
+	year="2022",
+	publisher="Springer International Publishing",
+	pages="58--73"
 }
 ```
 
